@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
+import com.iamhabib.easy_preference.EasyPreference;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +64,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user@orbit.com:password", "bar@example.com:world"
-    };
+//    private static final String[] DUMMY_CREDENTIALS = new String[]{
+//            "user@orbit.com:password", "bar@example.com:world"
+//    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -64,11 +79,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private TextView registerText;
 
+    SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+        sp = getSharedPreferences("login", MODE_PRIVATE);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -82,6 +100,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+        if (sp.getBoolean("logged", true) && !sp.getString("user_name", "user_name").equals("user_name")) {
+            //Log.d("logged", "Yes Loggein");
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+        } else {
+            //Log.d("logged", "No Loggein");
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                        attemptLogin();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -301,21 +336,103 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+        }
+
+        @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                String URL = "http://169.60.184.102/api/login_user";
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("email", mEmail);
+                jsonBody.put("password", mPassword);
+                JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        showProgress(false);
+                        try {
+//
+                            String id = response.optString("id");
+                            //Log.d("response_id", id);
+                            if (id.equals("701")) {
+                                String message = "The credentials do not match our records";
+                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                                mPasswordView.setError("Incorrect credentials");
+                                mPasswordView.requestFocus();
+                            } else if (id.equals("702")) {
+                                String message = response.getString("message").toString();
+                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                                mPasswordView.setError("Incorrect credentials");
+                                mEmailView.requestFocus();
+                            } else if (id.equals("700")) {
+                                String message = response.getString("message").toString();
+                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                                mPasswordView.setError("Incorrect credentials");
+                                mEmailView.requestFocus();
+                            } else {
+                                sp.edit().putBoolean("logged", true).apply();
+                                sp.edit().putString("user_name", mEmail).apply();
+                                sp.edit().putString("password", mPassword).apply();
+                                int role_id = response.optInt("role_id");
+                                UserPref prefs = new UserPref(response.optString("id"),role_id, response.optString("name"), response.optString("surname"), mEmail, response.optString("contact_number"),response.optString("gender"), response.optString("picture_url"),response.optString("city"));
+                                EasyPreference.with(getApplicationContext())
+                                        .addObject("user_pref", prefs)
+                                        .save();
+//                                //Log.d("User Years", String.valueOf(prefs.years_experience));
+                                mEmailView.setText("");
+                                mPasswordView.setText("");
+                                if(role_id==3){
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    String image_url = "http://169.60.184.102/photos" + response.optString("picture_url");
+                                    intent.putExtra("picture_url", image_url);
+                                    startActivity(intent);
+                                }
+                                else if(role_id==2){
+                                    Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
+                                    String image_url = "http://169.60.184.102/photos" + response.optString("picture_url");
+                                    intent.putExtra("picture_url", image_url);
+                                    startActivity(intent);
+                                }else{
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    String image_url = "http://169.60.184.102/photos" + response.optString("picture_url");
+                                    intent.putExtra("picture_url", image_url);
+                                    startActivity(intent);
+                                }
+
+
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+//                            Toast.makeText(LoginActivity.this,"Exception caught",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                //Log.d("User Years", String.valueOf(prefs.years_experience));
+                            mEmailView.setText("");
+                            mPasswordView.setText("");
+                            startActivity(intent);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Log.d("error", error.toString());
+                        showProgress(false);
+                        Toast.makeText(LoginActivity.this, "The credentials do not match our records", Toast.LENGTH_SHORT).show();
+                        mPasswordView.setError("Incorrect credentials");
+                        mPasswordView.requestFocus();
+                    }
+                });
+                requestQueue.add(loginRequest);
+            } catch (JSONException e) {
+                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            return null;
             // TODO: register the new account here.
             return true;
         }
@@ -323,21 +440,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
-            if (success) {
-                finish();
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+
         }
     }
 }

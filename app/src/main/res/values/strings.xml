@@ -28,10 +28,12 @@
     <string name="title_activity_main">Home</string>
     <string name="feedback">Help &amp;amp; Feedback</string>
     <string name="city_spinner_title">City</string>
-
+    <string name="incorrect_credentials">Incorrect credentials</string>
+    <string name="incorrect_cred">Incorrect credentials</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_manager">ManagerActivity</string>
 </resources>
