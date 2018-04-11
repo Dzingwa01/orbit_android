@@ -13,5 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         />
-
+    <ProgressBar
+        android:id="@+id/feed_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
 </android.support.constraint.ConstraintLayout>

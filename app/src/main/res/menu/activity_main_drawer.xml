@@ -6,27 +6,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_teams"
-            android:icon="@drawable/ic_people_black_24dp"
+            android:icon="@drawable/ic_people_black_24px"
             android:title="My Teams"/>
         <item
             android:id="@+id/nav_switch_team"
-            android:icon="@drawable/ic_compare_arrows_black_24dp"
+            android:icon="@drawable/ic_swap_horiz_black_24px"
             android:title="Switch Team"/>
-        <item
-            android:id="@+id/nav_view_documents"
-            android:icon="@drawable/ic_assignment_returned_black_24dp"
-            android:title="Switch Team"/>
+
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:icon="@drawable/ic_account_circle_black_24px"
             android:title="My Profile"/>
         <item
             android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help_outline_black_24dp"
+            android:icon="@drawable/ic_help_outline_black_24px"
             android:title="Help"/>
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:icon="@drawable/ic_info_outline_black_24px"
             android:title="About Orbit"/>
     </group>
 
@@ -34,11 +31,11 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_settings_black_24dp"
+                android:icon="@drawable/ic_settings_black_24px"
                 android:title="Settings"/>
             <item
-                android:id="@+id/nav_send"
-                android:icon="@android:drawable/ic_secure"
+                android:id="@+id/nav_signout"
+                android:icon="@drawable/ic_lock_outline_black_24px"
                 android:title="Logout"/>
         </menu>
     </item>

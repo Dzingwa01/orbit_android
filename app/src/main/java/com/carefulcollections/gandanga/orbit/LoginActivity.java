@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private TextView registerText;
-
+    String Base_URL;
     SharedPreferences sp;
 
     @Override
@@ -87,6 +87,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
         // Set up the login form.
         sp = getSharedPreferences("login", MODE_PRIVATE);
+        Credentials credentials = new Credentials("orbit_shift","http://169.60.184.102/");
+        EasyPreference.with(getApplicationContext())
+                .addObject("server_details", credentials)
+                .save();
+        Base_URL = credentials.server_url;
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -100,23 +105,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-        if (sp.getBoolean("logged", true) && !sp.getString("user_name", "user_name").equals("user_name")) {
-            //Log.d("logged", "Yes Loggein");
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-        } else {
-            //Log.d("logged", "No Loggein");
-            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                    if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                        attemptLogin();
-                        return true;
-                    }
-                    return false;
-                }
-            });
-        }
+//        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+//                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+//                    attemptLogin();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+//        if (sp.getBoolean("logged", true) && !sp.getString("user_name", "user_name").equals("user_name")) {
+//            //Log.d("logged", "Yes Loggein");
+//            if(sp.getInt("role_id",1)==3){
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//            else if(sp.getInt("role_id",1)==2){
+//                Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
+//                startActivity(intent);
+//            }
+//            else{
+//                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+//                    startActivity(intent);            }
+//
+//        } else {
+//            //Log.d("logged", "No Loggein");
+//
+//        }
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -346,7 +362,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-                String URL = "http://169.60.184.102/api/login_user";
+                Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("server_details", Credentials.class);
+                final String URL = credentials.server_url+"api/login_user";
+//               final String Base_URL =credentials.server_url;
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("email", mEmail);
                 jsonBody.put("password", mPassword);
@@ -355,29 +373,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     public void onResponse(JSONObject response) {
                         showProgress(false);
                         try {
-//
                             String id = response.optString("id");
-                            //Log.d("response_id", id);
-                            if (id.equals("701")) {
-                                String message = "The credentials do not match our records";
-                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-                                mPasswordView.setError("Incorrect credentials");
-                                mPasswordView.requestFocus();
-                            } else if (id.equals("702")) {
-                                String message = response.getString("message").toString();
-                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-                                mPasswordView.setError("Incorrect credentials");
-                                mEmailView.requestFocus();
-                            } else if (id.equals("700")) {
-                                String message = response.getString("message").toString();
-                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-                                mPasswordView.setError("Incorrect credentials");
-                                mEmailView.requestFocus();
-                            } else {
+                            if(!id.equals("700")&&!id.equals("701")&&!id.equals("702")){
                                 sp.edit().putBoolean("logged", true).apply();
                                 sp.edit().putString("user_name", mEmail).apply();
                                 sp.edit().putString("password", mPassword).apply();
                                 int role_id = response.optInt("role_id");
+                                sp.edit().putInt("role_id", role_id).apply();
                                 UserPref prefs = new UserPref(response.optString("id"),role_id, response.optString("name"), response.optString("surname"), mEmail, response.optString("contact_number"),response.optString("gender"), response.optString("picture_url"),response.optString("city"));
                                 EasyPreference.with(getApplicationContext())
                                         .addObject("user_pref", prefs)
@@ -387,35 +389,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 mPasswordView.setText("");
                                 if(role_id==3){
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    String image_url = "http://169.60.184.102/photos" + response.optString("picture_url");
+                                    String image_url = Base_URL+"photos" + response.optString("picture_url");
                                     intent.putExtra("picture_url", image_url);
                                     startActivity(intent);
                                 }
                                 else if(role_id==2){
                                     Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
-                                    String image_url = "http://169.60.184.102/photos" + response.optString("picture_url");
+                                    String image_url = Base_URL+"photos" + response.optString("picture_url");
                                     intent.putExtra("picture_url", image_url);
                                     startActivity(intent);
                                 }else{
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    String image_url = "http://169.60.184.102/photos" + response.optString("picture_url");
+                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                    String image_url = Base_URL+"photos" + response.optString("picture_url");
                                     intent.putExtra("picture_url", image_url);
                                     startActivity(intent);
                                 }
-
-
-
                             }
+                            else{
+                                Toast.makeText(LoginActivity.this, response.getString("message").toString(), Toast.LENGTH_SHORT).show();
+//                                mPasswordView.setError("Incorrect credentials");
+                                mPasswordView.requestFocus();
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
-//                            Toast.makeText(LoginActivity.this,"Exception caught",Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                //Log.d("User Years", String.valueOf(prefs.years_experience));
+                            Toast.makeText(LoginActivity.this,"An error occured on the server, Please try again later",Toast.LENGTH_LONG).show();
+//
                             mEmailView.setText("");
                             mPasswordView.setText("");
-                            startActivity(intent);
                         }
-
 
                     }
                 }, new Response.ErrorListener() {
