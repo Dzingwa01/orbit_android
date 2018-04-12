@@ -42,6 +42,7 @@ import com.android.volley.toolbox.Volley;
 import com.carefulcollections.gandanga.orbit.ChatFragment;
 import com.carefulcollections.gandanga.orbit.Credentials;
 import com.carefulcollections.gandanga.orbit.CurrentScheduleFragment;
+import com.carefulcollections.gandanga.orbit.EmployeeProfile;
 import com.carefulcollections.gandanga.orbit.HomeActivity;
 import com.carefulcollections.gandanga.orbit.InboxFragment;
 import com.carefulcollections.gandanga.orbit.LoginActivity;
@@ -107,7 +108,7 @@ public class ManagerActivity extends AppCompatActivity
 //            id_number = pref.id_number;
         phone_number = pref.phone_number;
         gender = pref.gender;
-        user_id = pref._id;
+        user_id = pref.id;
         picture_url = pref.picture_url;
         //Log.d("Picture URL", picture_url);
         user_email = email;
@@ -119,18 +120,12 @@ public class ManagerActivity extends AppCompatActivity
         user_email_textview.setText(email);
         first_name = name;//
 
-//        sp = getSharedPreferences("login", MODE_PRIVATE);
-//        //Log.d("Payments", "Payments");
-//        if (!sp.getBoolean("logged", true)) {
-//            Intent intent = new Intent(ManagerActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//        } else if (!sp.getString("user_name", "user_name").equals("user_name")) {
-//            //Log.d("username", sp.getString("user_name", "user_name"));
-//            Intent intent = new Intent(ManagerActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//        } else {
-//
-//        }
+        sp = getSharedPreferences("login", MODE_PRIVATE);
+        //Log.d("Payments", "Payments");
+        if (!sp.getBoolean("logged", true)) {
+            Intent intent = new Intent(ManagerActivity.this, LoginActivity.class);
+            startActivity(intent);
+        } 
     }
 
     @Override
@@ -209,6 +204,9 @@ public class ManagerActivity extends AppCompatActivity
         if (id == R.id.nav_logout) {
             // Handle the camera action
             showLogoutConfirmDialog();
+        }else if(id==R.id.nav_employees){
+            Intent intent = new Intent(ManagerActivity.this, EmployeeProfile.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -336,7 +334,6 @@ public class ManagerActivity extends AppCompatActivity
 
         @Override
         protected void onCancelled() {
-
             showProgress(false);
 
         }

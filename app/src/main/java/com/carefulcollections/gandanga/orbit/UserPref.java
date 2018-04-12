@@ -11,7 +11,7 @@ public class UserPref {
     public String last_name;
     public String email;
     public String picture_url;
-    public String _id;
+    public String id;
     public String phone_number;
     public String gender;
     public String city;
@@ -22,7 +22,7 @@ public class UserPref {
         this.last_name = last_name;
         this.email = email;
         this.picture_url = picture_url;
-        this._id = _id;
+        this.id = _id;
         this.phone_number = phone_number;
         this.gender = gender;
         this.city = city;

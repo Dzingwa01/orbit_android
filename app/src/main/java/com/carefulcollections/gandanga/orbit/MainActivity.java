@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 //            id_number = pref.id_number;
         phone_number = pref.phone_number;
         gender = pref.gender;
-        user_id = pref._id;
+        user_id = pref.id;
         picture_url = pref.picture_url;
         //Log.d("Picture URL", picture_url);
         user_email = email;

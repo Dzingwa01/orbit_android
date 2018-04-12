@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -95,6 +96,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
+        if (sp.getBoolean("logged", true) && !sp.getString("user_name", "user_name").equals("user_name")) {
+            Log.d("logged", "Yes Loggein");
+            if(sp.getInt("role_id",1)==3){
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+            else if(sp.getInt("role_id",1)==2){
+                Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);            }
+
+        } else {
+            Log.d("logged", "No Loggein");
+
+        }
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -105,34 +124,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-//        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-//                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-//                    attemptLogin();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//        if (sp.getBoolean("logged", true) && !sp.getString("user_name", "user_name").equals("user_name")) {
-//            //Log.d("logged", "Yes Loggein");
-//            if(sp.getInt("role_id",1)==3){
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//            else if(sp.getInt("role_id",1)==2){
-//                Intent intent = new Intent(LoginActivity.this, ManagerActivity.class);
-//                startActivity(intent);
-//            }
-//            else{
-//                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                    startActivity(intent);            }
-//
-//        } else {
-//            //Log.d("logged", "No Loggein");
-//
-//        }
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
