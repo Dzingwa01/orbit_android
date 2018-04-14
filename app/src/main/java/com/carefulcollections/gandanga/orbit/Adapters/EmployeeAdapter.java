@@ -60,6 +60,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
         if (user != null) {
             holder.full_name.setText(WordUtils.capitalizeFully(user.name )+ " " + WordUtils.capitalizeFully(user.surname));
             holder.email.setText(user.email);
+            holder.contact_number.setText(user.contact_number);
 
                     try {
                         String picture_url = user.picture_url;
@@ -105,7 +106,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView full_name, email;
+        private TextView full_name, email,contact_number;
         private ImageView user_picture_url;
 
         public MyViewHolder(View v) {
@@ -113,6 +114,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
             full_name = v.findViewById(R.id.full_name);
             email = v.findViewById(R.id.email);
             user_picture_url = v.findViewById(R.id.profile_picture);
+            contact_number = v.findViewById(R.id.contact_number);
         }
     }
     public Filter getFilter() {

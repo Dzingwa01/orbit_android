@@ -62,6 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ManagerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ViewPager mViewPager;
+    private TabLayout tabLayout;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     SharedPreferences sp;
     ProgressBar feed_progress;
@@ -81,13 +82,11 @@ public class ManagerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        feed_progress = findViewById(R.id.feed_progress);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         setupViewPager(mViewPager);
+        tabLayout = (TabLayout) findViewById(R.id.managerTabLayout); // get the reference of TabLayout
+        tabLayout.setupWithViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -125,7 +124,7 @@ public class ManagerActivity extends AppCompatActivity
         if (!sp.getBoolean("logged", true)) {
             Intent intent = new Intent(ManagerActivity.this, LoginActivity.class);
             startActivity(intent);
-        } 
+        }
     }
 
     @Override
@@ -208,6 +207,15 @@ public class ManagerActivity extends AppCompatActivity
             Intent intent = new Intent(ManagerActivity.this, EmployeeProfile.class);
             startActivity(intent);
         }
+        else if(id==R.id.nav_manage_teams){
+            Intent intent = new Intent(ManagerActivity.this, ManageTeams.class);
+            startActivity(intent);
+        }
+        else if(id==R.id.nav_training_material){
+            Intent intent = new Intent(ManagerActivity.this, TrainingMaterials.class);
+            startActivity(intent);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -361,9 +369,9 @@ public class ManagerActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CurrentScheduleFragment(), "Current");
-        adapter.addFragment(new TeamsFragment(), "Schedule");
-        adapter.addFragment(new ChatFragment(), "Chat");
+        adapter.addFragment(new ManagerShifts(), "Shifts");
+        adapter.addFragment(new TeamsFragment(), "Teams");
+
         adapter.addFragment(new InboxFragment(), "Inbox");
         viewPager.setAdapter(adapter);
     }

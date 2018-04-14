@@ -36,6 +36,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_manager">ManagerActivity</string>
-    <string name="title_activity_employee_profile">EmployeeProfile</string>
+    <string name="title_activity_employee_profile">Employees</string>
     <string name="title_activity_employees">Employees</string>
+    <string name="title_activity_manage_teams">Manage Teams</string>
+    <string name="title_activity_training_materials">Training Materials</string>
 </resources>

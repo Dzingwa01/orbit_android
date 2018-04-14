@@ -82,6 +82,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
         </activity>
+        <activity
+            android:name=".Managers.ManageTeams"
+            android:label="@string/title_activity_manage_teams"
+            android:parentActivityName=".Managers.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
+        <activity
+            android:name=".Managers.TrainingMaterials"
+            android:label="@string/title_activity_training_materials"
+            android:parentActivityName=".Managers.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
     </application>
 
 </manifest>
