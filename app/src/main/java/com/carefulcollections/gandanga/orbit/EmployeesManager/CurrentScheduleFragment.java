@@ -32,6 +32,7 @@ import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
 import com.carefulcollections.gandanga.orbit.Managers.TeamsFragment;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
+import com.carefulcollections.gandanga.orbit.Models.Task;
 import com.carefulcollections.gandanga.orbit.Models.Team;
 import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
@@ -46,6 +47,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 
 /**
@@ -59,6 +61,8 @@ public class CurrentScheduleFragment extends Fragment {
     ProgressBar progressBar;
     RecyclerView.LayoutManager mLayoutManager;
     SwipeRefreshLayout mSwipeLayout;
+    public ArrayList<Task> task_list;
+    public TasksAdapter tasksAdapter;
 
     public CurrentScheduleFragment() {
         // Required empty public constructor
@@ -73,6 +77,7 @@ public class CurrentScheduleFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_current_schedule, container, false);
         listView = v.findViewById(R.id.current_shift);
         shift_list = new ArrayList<>();
+        task_list = new ArrayList<>();
         progressBar = v.findViewById(R.id.progress);
         mSwipeLayout = v.findViewById(R.id.swipeRefreshLayout);
         new GetEmployeeShifts().execute();
@@ -128,7 +133,10 @@ public class CurrentScheduleFragment extends Fragment {
                                 }
 
                             } else {
+                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),0,"none");
                                 Toast.makeText(getActivity(), "There are no shifts available yet", Toast.LENGTH_LONG).show();
+                                shift_list.add(shift);
+                                setupAdapter();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -157,17 +165,13 @@ public class CurrentScheduleFragment extends Fragment {
             return true;
         }
 
-        public void setupAdapter() {
-            teamAdapter = new CurrentShiftAdapter(shift_list, getActivity());
-            mLayoutManager = new LinearLayoutManager( getActivity());
-            listView.setLayoutManager(mLayoutManager);
-            listView.setItemAnimator(new DefaultItemAnimator());
-            listView.setAdapter(teamAdapter);
-        }
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
             showProgress(false);
+            Log.d("employee_tasks","check us hereee");
+            new GetEmployeeTasks().execute();
         }
 
         @Override
@@ -175,6 +179,115 @@ public class CurrentScheduleFragment extends Fragment {
         }
     }
 
+    public class GetEmployeeTasks extends AsyncTask<Void, Void, Boolean> {
+
+        public GetEmployeeTasks(){
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+//            post_list = new ArrayList<Post>();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            try {
+                RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
+                UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
+                final String url = credentials.server_url;
+                String URL = url+"api/get_current_tasks/"+pref.id;
+
+                JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray response_obj = response.getJSONArray("tasks");
+                            Log.d("Response",response_obj.toString());
+                            if (response_obj.length() > 0) {
+//
+                                for (int i = 0; i < response_obj.length(); i++) {
+                                    JSONObject obj = response_obj.getJSONObject(i);
+                                    JsonParser parser = new JsonParser();
+
+                                    JsonElement element = parser.parse(obj.toString());
+                                    Gson gson = new Gson();
+                                    Task task = gson.fromJson(element, Task.class);
+                                    task_list.add(task);
+
+                                }
+                                if (task_list.size() > 0) {
+                                    Log.d("Check","Check me");
+//                                    Collections.sort(shift_list, new TeamComparator());
+//                                    teamAdapter.notifyDataSetChanged();
+                                    setupTaskAdapter();
+                                }
+
+                            } else {
+                                Task task = new Task(0,"No tasks upcoming for today","No tasks for today","",new Date(),0,new Date());
+                                Toast.makeText(getActivity(), "There are no tasks available yet", Toast.LENGTH_LONG).show();
+                                task_list.add(task);
+                                setupTaskAdapter();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
+                            showProgress(false);
+                            Intent intent = new Intent(getActivity(),MainActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Log.d("error", error.toString());
+
+                    }
+                });
+                requestQueue.add(provinceRequest);
+            } catch (Exception e) {
+                showProgress(false);
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
+            }
+            // TODO: register the new account here.
+            return true;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            showProgress(false);
+
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+    public void setupAdapter() {
+        teamAdapter = new CurrentShiftAdapter(shift_list, getActivity());
+        mLayoutManager = new LinearLayoutManager( getActivity());
+        listView.setLayoutManager(mLayoutManager);
+        listView.setItemAnimator(new DefaultItemAnimator());
+        listView.setAdapter(teamAdapter);
+    }
+    public void setupTaskAdapter() {
+        Log.d("Output","setting tasks");
+        tasksAdapter = new TasksAdapter(task_list, getActivity());
+        mLayoutManager = new LinearLayoutManager( getActivity());
+        listView.setLayoutManager(mLayoutManager);
+        listView.setItemAnimator(new DefaultItemAnimator());
+        listView.setAdapter(tasksAdapter);
+    }
     /**
      * Shows the progress UI and hides the login form.
      */

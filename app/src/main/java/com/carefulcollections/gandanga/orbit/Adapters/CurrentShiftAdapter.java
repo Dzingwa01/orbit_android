@@ -58,17 +58,22 @@ public class CurrentShiftAdapter extends RecyclerView.Adapter<CurrentShiftAdapte
         final Shift shift = arraylist.get(position);
 
         if (shift != null) {
-            holder.shift_title.setText(WordUtils.capitalizeFully(shift.shift_title ));
-            holder.start_date.setText(shift.start_date.toString());
-            holder.end_date.setText(shift.end_date.toString());
+            if(shift.team_name=="none"){
+                holder.shift_title.setText(WordUtils.capitalizeFully(shift.shift_title ));
+            }
+            else{
+                holder.shift_title.setText(WordUtils.capitalizeFully(shift.shift_title ));
+                holder.start_date.setText(shift.start_date.toString());
+                holder.end_date.setText(shift.end_date.toString());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                @Override
-                public void onClick(View v) {
+                    }
+                });
+            }
 
-                }
-            });
         }
     }
 
