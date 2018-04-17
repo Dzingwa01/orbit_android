@@ -1,25 +1,22 @@
-package com.carefulcollections.gandanga.orbit.Managers;
+package com.carefulcollections.gandanga.orbit.EmployeesManager;
+
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -29,12 +26,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.carefulcollections.gandanga.orbit.Adapters.*;
 import com.carefulcollections.gandanga.orbit.Adapters.TeamsAdapter;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
+import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
+import com.carefulcollections.gandanga.orbit.Managers.TeamsFragment;
+import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.Team;
 import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
-import com.carefulcollections.gandanga.orbit.R;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
+import com.carefulcollections.gandanga.orbit.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -46,45 +47,43 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ManageTeams extends AppCompatActivity {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class CurrentScheduleFragment extends Fragment {
 
     private RecyclerView listView;
-    private TeamsAdapter teamAdapter;
-    private ArrayList<Team> teams_list;
+    private CurrentShiftAdapter teamAdapter;
+    private ArrayList<Shift> shift_list;
     ProgressBar progressBar;
     RecyclerView.LayoutManager mLayoutManager;
+    SwipeRefreshLayout mSwipeLayout;
+
+    public CurrentScheduleFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_teams);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_team);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Adding a New Team Coming Soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        listView = findViewById(R.id.listView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
 
-        teams_list = new ArrayList<>();
-        progressBar = findViewById(R.id.progress);
-
-        teamAdapter = new TeamsAdapter(teams_list, ManageTeams.this);
-        mLayoutManager = new LinearLayoutManager(this);
-        listView.setLayoutManager(mLayoutManager);
-        listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(teamAdapter);
-        new GetTeams().execute();
+        View v = inflater.inflate(R.layout.fragment_current_schedule, container, false);
+        listView = v.findViewById(R.id.current_shift);
+        shift_list = new ArrayList<>();
+        progressBar = v.findViewById(R.id.progress);
+        mSwipeLayout = v.findViewById(R.id.swipeRefreshLayout);
+        new GetEmployeeShifts().execute();
+        return v;
     }
-    public class GetTeams extends AsyncTask<Void, Void, Boolean> {
-        GetTeams() {
-        }
+
+    public class GetEmployeeShifts extends AsyncTask<Void, Void, Boolean> {
+
+      public GetEmployeeShifts(){
+
+      }
 
         @Override
         protected void onPreExecute() {
@@ -97,17 +96,18 @@ public class ManageTeams extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                RequestQueue requestQueue = Volley.newRequestQueue(ManageTeams.this);
-                Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("server_details", Credentials.class);
-                UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
+                RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
+                UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
-                String URL = url+"api/get_teams/"+pref.id;
+                String URL = url+"api/get_current_shift/"+pref.id;
 
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray response_obj = response.getJSONArray("teams");
+                            JSONArray response_obj = response.getJSONArray("shifts");
+                            Log.d("Response",response_obj.toString());
                             if (response_obj.length() > 0) {
 //
                                 for (int i = 0; i < response_obj.length(); i++) {
@@ -116,23 +116,25 @@ public class ManageTeams extends AppCompatActivity {
 
                                     JsonElement element = parser.parse(obj.toString());
                                     Gson gson = new Gson();
-                                    Team team = gson.fromJson(element, Team.class);
-                                    teams_list.add(team);
+                                    Shift shift = gson.fromJson(element, Shift.class);
+                                    shift_list.add(shift);
 
                                 }
-                                if (teams_list.size() > 0) {
-                                    Collections.sort(teams_list, new TeamComparator());
-                                    teamAdapter.notifyDataSetChanged();
+                                if (shift_list.size() > 0) {
+                                    Log.d("Check","Check me");
+//                                    Collections.sort(shift_list, new TeamComparator());
+//                                    teamAdapter.notifyDataSetChanged();
+                                    setupAdapter();
                                 }
 
                             } else {
-                                Toast.makeText(ManageTeams.this, "There are no teams available as yet", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "There are no shifts available yet", Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(ManageTeams.this, "Data error, please try again", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
                             showProgress(false);
-                            Intent intent = new Intent(ManageTeams.this,ManagerActivity.class);
+                            Intent intent = new Intent(getActivity(),ManagerActivity.class);
                             startActivity(intent);
                         }
 
@@ -147,12 +149,20 @@ public class ManageTeams extends AppCompatActivity {
                 requestQueue.add(provinceRequest);
             } catch (Exception e) {
                 showProgress(false);
-                Toast.makeText(ManageTeams.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(ManageTeams.this,ManagerActivity.class);
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(),ManagerActivity.class);
                 startActivity(intent);
             }
             // TODO: register the new account here.
             return true;
+        }
+
+        public void setupAdapter() {
+            teamAdapter = new CurrentShiftAdapter(shift_list, getActivity());
+            mLayoutManager = new LinearLayoutManager( getActivity());
+            listView.setLayoutManager(mLayoutManager);
+            listView.setItemAnimator(new DefaultItemAnimator());
+            listView.setAdapter(teamAdapter);
         }
 
         @Override
@@ -191,43 +201,4 @@ public class ManageTeams extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //*** setOnQueryTextFocusChangeListener ***
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                teamAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                teamAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-
-        return true;
-    }
 }

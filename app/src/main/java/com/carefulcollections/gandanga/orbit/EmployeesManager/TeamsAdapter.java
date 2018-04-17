@@ -1,4 +1,4 @@
-package com.carefulcollections.gandanga.orbit.Adapters;
+package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,46 +21,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Gandanga on 2018-04-13.
+ * Created by Gandanga on 2018-04-17.
  */
 
 public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyViewHolder> implements Filterable {
 
-    private List<Team> teams;
-    private Context ctx;
+private List<Team> teams;
+private Context ctx;
 
-    private List<Team> arraylist;
+private List<Team> arraylist;
 
-    public TeamsAdapter(List<Team> teams, Context context){
+public TeamsAdapter(List<Team> teams, Context context){
         this.ctx = context;
         this.teams = teams;
         this.arraylist = teams;
 
-    }
-
-    @NonNull
-    @Override
-    public TeamsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.teams_row_layout, parent, false);
-        return new TeamsAdapter.MyViewHolder(itemView);
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView city_name, team_name, team_description;
-
-        public MyViewHolder(View v) {
-            super(v);
-            city_name = v.findViewById(R.id.city_name);
-            team_name = v.findViewById(R.id.team_name);
-            team_description = v.findViewById(R.id.team_description);
         }
-    }
+
+@NonNull
+@Override
+public TeamsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.teams_row_layout, parent, false);
+        return new TeamsAdapter.MyViewHolder(itemView);
+        }
 
     @Override
-    public void onBindViewHolder(@NonNull TeamsAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Team team = arraylist.get(position);
-
         if (team != null) {
             holder.city_name.setText(WordUtils.capitalizeFully(team.city_name ));
             holder.team_name.setText(WordUtils.capitalizeFully(team.team_name ));
@@ -70,13 +58,23 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyViewHolder
                 @Override
                 public void onClick(View v) {
                     Team team_selected = team;
-                    Intent intent = new Intent(ctx, ManageTeams.class);
-                    intent.putExtra("team", team_selected);
-                    ctx.startActivity(intent);
+
                 }
             });
         }
     }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+    private TextView city_name, team_name, team_description;
+
+    public MyViewHolder(View v) {
+        super(v);
+        city_name = v.findViewById(R.id.city_name);
+        team_name = v.findViewById(R.id.team_name);
+        team_description = v.findViewById(R.id.team_description);
+    }
+}
+
 
     @Override
     public int getItemCount() {

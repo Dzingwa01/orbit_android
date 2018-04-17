@@ -40,4 +40,6 @@
     <string name="title_activity_employees">Employees</string>
     <string name="title_activity_manage_teams">Manage Teams</string>
     <string name="title_activity_training_materials">Training Materials</string>
+    <string name="title_activity_employee_roles">EmployeeRoles</string>
+    <string name="title_activity_employee_teams">EmployeeTeams</string>
 </resources>

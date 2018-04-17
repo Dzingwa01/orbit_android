@@ -16,11 +16,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.carefulcollections.gandanga.orbit.EmployeeProfile;
+import com.carefulcollections.gandanga.orbit.Managers.EmployeeProfile;
 import com.carefulcollections.gandanga.orbit.Models.User;
 import com.carefulcollections.gandanga.orbit.R;
 import com.ceylonlabs.imageviewpopup.ImagePopup;
-import com.iamhabib.easy_preference.EasyPreference;
 //import com.ceylonlabs.imageviewpopup.ImagePopup;
 
 import org.apache.commons.lang3.text.WordUtils;

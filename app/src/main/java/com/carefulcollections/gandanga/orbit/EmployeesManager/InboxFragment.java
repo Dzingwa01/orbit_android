@@ -1,5 +1,4 @@
-package com.carefulcollections.gandanga.orbit;
-
+package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,13 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.carefulcollections.gandanga.orbit.R;
+
 /**
  * Created by Gandanga on 2018-03-07.
  */
 
-public class TeamsFragment extends ListFragment implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
-
-    public TeamsFragment(){
+public class InboxFragment extends ListFragment implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+    public InboxFragment(){
 
     }
     @Override

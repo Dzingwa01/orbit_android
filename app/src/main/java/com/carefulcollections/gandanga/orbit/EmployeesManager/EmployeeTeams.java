@@ -1,15 +1,14 @@
-package com.carefulcollections.gandanga.orbit;
+package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,9 +27,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.carefulcollections.gandanga.orbit.Adapters.EmployeeAdapter;
-import com.carefulcollections.gandanga.orbit.Models.User;
-import com.carefulcollections.gandanga.orbit.Models.UserComparator;
+
+import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
+import com.carefulcollections.gandanga.orbit.Models.Team;
+import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
+import com.carefulcollections.gandanga.orbit.R;
+import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -42,43 +44,38 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class EmployeeProfile extends AppCompatActivity {
+public class EmployeeTeams extends AppCompatActivity {
 
     private RecyclerView listView;
-    private EmployeeAdapter employeeAdapter;
-    private ArrayList<User> users_list;
+    private TeamsAdapter teamAdapter;
+    private ArrayList<Team> teams_list;
     ProgressBar progressBar;
     RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_employee_profile);
+        setContentView(R.layout.activity_employee_teams);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView = findViewById(R.id.listView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_employee);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Adding a New Employee Coming Soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        users_list = new ArrayList<>();
-        progressBar = findViewById(R.id.comments_progress);
 
-        employeeAdapter = new EmployeeAdapter(users_list, EmployeeProfile.this);
+        teams_list = new ArrayList<>();
+        progressBar = findViewById(R.id.progress);
+
+        teamAdapter = new TeamsAdapter(teams_list, EmployeeTeams.this);
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(employeeAdapter);
-        new GetUsers().execute();
+        listView.setAdapter(teamAdapter);
+        new GetTeams().execute();
     }
 
-    public class GetUsers extends AsyncTask<Void, Void, Boolean> {
-        GetUsers() {
+    public class GetTeams extends AsyncTask<Void, Void, Boolean> {
+        GetTeams() {
         }
 
         @Override
@@ -92,18 +89,17 @@ public class EmployeeProfile extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                RequestQueue requestQueue = Volley.newRequestQueue(EmployeeProfile.this);
+                RequestQueue requestQueue = Volley.newRequestQueue(EmployeeTeams.this);
                 Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("server_details", Credentials.class);
                 UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
-                String URL = url+"api/get_employees/"+pref.id;
-                JSONObject jsonBody = new JSONObject();
-//                jsonBody.put("creator_id", pref.id);
+                String URL = url+"api/get_employee_teams/"+pref.id;
+
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray response_obj = response.getJSONArray("users");
+                            JSONArray response_obj = response.getJSONArray("teams");
                             if (response_obj.length() > 0) {
 //
                                 for (int i = 0; i < response_obj.length(); i++) {
@@ -112,20 +108,24 @@ public class EmployeeProfile extends AppCompatActivity {
 
                                     JsonElement element = parser.parse(obj.toString());
                                     Gson gson = new Gson();
-                                    User user = gson.fromJson(element, User.class);
-                                    users_list.add(user);
+                                    Team team = gson.fromJson(element, Team.class);
+                                    teams_list.add(team);
 
                                 }
-                                if (users_list.size() > 0) {
-                                    Collections.sort(users_list, new UserComparator());
-                                    employeeAdapter.notifyDataSetChanged();
+                                if (teams_list.size() > 0) {
+                                    Collections.sort(teams_list, new TeamComparator());
+                                    teamAdapter.notifyDataSetChanged();
                                 }
 
                             } else {
-                                Toast.makeText(EmployeeProfile.this, "There are no users available as yet", Toast.LENGTH_LONG).show();
+                                Toast.makeText(EmployeeTeams.this, "There are no teams available as yet", Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            Toast.makeText(EmployeeTeams.this, "Data error, please try again", Toast.LENGTH_LONG).show();
+                            showProgress(false);
+                            Intent intent = new Intent(EmployeeTeams.this,MainActivity.class);
+                            startActivity(intent);
                         }
 
                     }
@@ -139,7 +139,9 @@ public class EmployeeProfile extends AppCompatActivity {
                 requestQueue.add(provinceRequest);
             } catch (Exception e) {
                 showProgress(false);
-                Toast.makeText(EmployeeProfile.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(EmployeeTeams.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(EmployeeTeams.this,MainActivity.class);
+                startActivity(intent);
             }
             // TODO: register the new account here.
             return true;
@@ -207,19 +209,13 @@ public class EmployeeProfile extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                //Log.d("Lister","Hittted");
-                //Log.d("Query",query);
-                employeeAdapter.getFilter().filter(query);
+                teamAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                //Log.d("ListerChanged","Hittted");
-                //Log.d("Query",query);
-                employeeAdapter.getFilter().filter(query);
+                teamAdapter.getFilter().filter(query);
                 return false;
             }
         });

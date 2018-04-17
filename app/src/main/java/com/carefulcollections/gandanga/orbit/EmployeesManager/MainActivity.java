@@ -1,11 +1,10 @@
-package com.carefulcollections.gandanga.orbit;
+package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -22,7 +21,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
+import com.carefulcollections.gandanga.orbit.ChatFragment;
+import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
+import com.carefulcollections.gandanga.orbit.R;
+import com.carefulcollections.gandanga.orbit.Models.UserPref;
+import com.carefulcollections.gandanga.orbit.Helpers.ViewPagerAdapter;
 import com.iamhabib.easy_preference.EasyPreference;
 import com.squareup.picasso.Picasso;
 
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CurrentScheduleFragment(), "Current");
-        adapter.addFragment(new TeamsFragment(), "Schedule");
+        adapter.addFragment(new EmployeeScheduleFragment(), "Schedule");
         adapter.addFragment(new ChatFragment(), "Chat");
         adapter.addFragment(new InboxFragment(), "Inbox");
         viewPager.setAdapter(adapter);
@@ -171,6 +174,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_signout) {
             // Handle the camera action
             showLogoutConfirmDialog();
+        }
+        else if(id == R.id.nav_my_teams){
+            Intent intent = new Intent(MainActivity.this, EmployeeTeams.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

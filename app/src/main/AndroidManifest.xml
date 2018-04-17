@@ -52,7 +52,7 @@
                 android:value="com.carefulcollections.gandanga.orbit.LoginActivity"/>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".EmployeesManager.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -66,7 +66,7 @@
                 android:value="com.carefulcollections.gandanga.orbit.LoginActivity"/>
         </activity>
         <activity
-            android:name=".EmployeeProfile"
+            android:name=".Managers.EmployeeProfile"
             android:label="@string/title_activity_employee_profile"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -74,7 +74,7 @@
                 android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
         </activity>
         <activity
-            android:name=".Employees"
+            android:name=".Managers.Employees"
             android:label="@string/title_activity_employees"
             android:parentActivityName=".Managers.ManagerActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -95,6 +95,22 @@
             android:name=".Managers.TrainingMaterials"
             android:label="@string/title_activity_training_materials"
             android:parentActivityName=".Managers.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
+        <activity
+            android:name=".Managers.EmployeeRoles"
+            android:label="@string/title_activity_employee_roles"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
+        <activity
+            android:name=".EmployeesManager.EmployeeTeams"
+            android:label="@string/title_activity_employee_teams"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

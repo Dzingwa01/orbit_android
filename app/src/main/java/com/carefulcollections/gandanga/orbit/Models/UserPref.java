@@ -1,4 +1,4 @@
-package com.carefulcollections.gandanga.orbit;
+package com.carefulcollections.gandanga.orbit.Models;
 
 import java.util.ArrayList;
 

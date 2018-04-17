@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,10 +28,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.carefulcollections.gandanga.orbit.Adapters.TeamsAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.EmployeeRoleAdapter;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
-import com.carefulcollections.gandanga.orbit.Models.Team;
-import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
+import com.carefulcollections.gandanga.orbit.Models.Role;
+import com.carefulcollections.gandanga.orbit.Models.RoleComparator;
 import com.carefulcollections.gandanga.orbit.R;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.google.gson.Gson;
@@ -46,44 +45,44 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ManageTeams extends AppCompatActivity {
-
+public class EmployeeRoles extends AppCompatActivity {
     private RecyclerView listView;
-    private TeamsAdapter teamAdapter;
-    private ArrayList<Team> teams_list;
+    private EmployeeRoleAdapter roleAdapter;
+    private ArrayList<Role> roles_list;
     ProgressBar progressBar;
     RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_teams);
+        setContentView(R.layout.activity_employee_roles);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_team);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_role);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Adding a New Team Coming Soon", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Coming soon", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         listView = findViewById(R.id.listView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        roles_list = new ArrayList<>();
+        progressBar = findViewById(R.id.employee_progress);
 
-        teams_list = new ArrayList<>();
-        progressBar = findViewById(R.id.progress);
-
-        teamAdapter = new TeamsAdapter(teams_list, ManageTeams.this);
+        roleAdapter = new EmployeeRoleAdapter(roles_list, EmployeeRoles.this);
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
         listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(teamAdapter);
-        new GetTeams().execute();
+        listView.setAdapter(roleAdapter);
+        new GetRoles().execute();
     }
-    public class GetTeams extends AsyncTask<Void, Void, Boolean> {
-        GetTeams() {
+
+    public class GetRoles extends AsyncTask<Void, Void, Boolean>
+    {
+
+        GetRoles() {
         }
 
         @Override
@@ -97,17 +96,18 @@ public class ManageTeams extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             try {
-                RequestQueue requestQueue = Volley.newRequestQueue(ManageTeams.this);
+                RequestQueue requestQueue = Volley.newRequestQueue(EmployeeRoles.this);
                 Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("server_details", Credentials.class);
                 UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
-                String URL = url+"api/get_teams/"+pref.id;
-
+                String URL = url+"api/get_roles/"+pref.id;
+                JSONObject jsonBody = new JSONObject();
+//                jsonBody.put("creator_id", pref.id);
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray response_obj = response.getJSONArray("teams");
+                            JSONArray response_obj = response.getJSONArray("roles");
                             if (response_obj.length() > 0) {
 //
                                 for (int i = 0; i < response_obj.length(); i++) {
@@ -116,24 +116,20 @@ public class ManageTeams extends AppCompatActivity {
 
                                     JsonElement element = parser.parse(obj.toString());
                                     Gson gson = new Gson();
-                                    Team team = gson.fromJson(element, Team.class);
-                                    teams_list.add(team);
+                                    Role role = gson.fromJson(element, Role.class);
+                                    roles_list.add(role);
 
                                 }
-                                if (teams_list.size() > 0) {
-                                    Collections.sort(teams_list, new TeamComparator());
-                                    teamAdapter.notifyDataSetChanged();
+                                if (roles_list.size() > 0) {
+                                    Collections.sort(roles_list, new RoleComparator());
+                                    roleAdapter.notifyDataSetChanged();
                                 }
 
                             } else {
-                                Toast.makeText(ManageTeams.this, "There are no teams available as yet", Toast.LENGTH_LONG).show();
+                                Toast.makeText(EmployeeRoles.this, "There are no roles available as yet", Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(ManageTeams.this, "Data error, please try again", Toast.LENGTH_LONG).show();
-                            showProgress(false);
-                            Intent intent = new Intent(ManageTeams.this,ManagerActivity.class);
-                            startActivity(intent);
                         }
 
                     }
@@ -147,9 +143,7 @@ public class ManageTeams extends AppCompatActivity {
                 requestQueue.add(provinceRequest);
             } catch (Exception e) {
                 showProgress(false);
-                Toast.makeText(ManageTeams.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(ManageTeams.this,ManagerActivity.class);
-                startActivity(intent);
+                Toast.makeText(EmployeeRoles.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
             // TODO: register the new account here.
             return true;
@@ -217,17 +211,24 @@ public class ManageTeams extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                teamAdapter.getFilter().filter(query);
+                // filter recycler view when query submitted
+                //Log.d("Lister","Hittted");
+                //Log.d("Query",query);
+                roleAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                teamAdapter.getFilter().filter(query);
+                // filter recycler view when text is changed
+                //Log.d("ListerChanged","Hittted");
+                //Log.d("Query",query);
+                roleAdapter.getFilter().filter(query);
                 return false;
             }
         });
 
         return true;
     }
+
 }

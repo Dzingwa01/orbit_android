@@ -18,21 +18,5 @@
         agendaCalendar:calendarPastDayTextColor="@color/theme_light_primary"
         agendaCalendar:fabColor="@color/theme_accent" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_shift"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        agendaCalendar:layout_constraintBottom_toBottomOf="parent"
-        agendaCalendar:layout_constraintEnd_toEndOf="parent"
-        agendaCalendar:layout_constraintHorizontal_bias="0.948"
-        agendaCalendar:layout_constraintStart_toStartOf="parent"
-        agendaCalendar:layout_constraintTop_toTopOf="parent"
-        agendaCalendar:layout_constraintVertical_bias="0.872"
-        app:srcCompat="@android:drawable/ic_input_add"/>
+
 </android.support.constraint.ConstraintLayout>

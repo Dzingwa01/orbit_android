@@ -10,8 +10,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +26,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,18 +36,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.carefulcollections.gandanga.orbit.ChatFragment;
-import com.carefulcollections.gandanga.orbit.Credentials;
-import com.carefulcollections.gandanga.orbit.CurrentScheduleFragment;
-import com.carefulcollections.gandanga.orbit.EmployeeProfile;
+import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.HomeActivity;
-import com.carefulcollections.gandanga.orbit.InboxFragment;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.InboxFragment;
 import com.carefulcollections.gandanga.orbit.LoginActivity;
-import com.carefulcollections.gandanga.orbit.MainActivity;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity;
 import com.carefulcollections.gandanga.orbit.R;
-import com.carefulcollections.gandanga.orbit.TeamsFragment;
-import com.carefulcollections.gandanga.orbit.UserPref;
-import com.carefulcollections.gandanga.orbit.ViewPagerAdapter;
+
+import com.carefulcollections.gandanga.orbit.Models.UserPref;
+import com.carefulcollections.gandanga.orbit.Helpers.ViewPagerAdapter;
 import com.iamhabib.easy_preference.EasyPreference;
 import com.squareup.picasso.Picasso;
 
@@ -213,6 +207,11 @@ public class ManagerActivity extends AppCompatActivity
         }
         else if(id==R.id.nav_training_material){
             Intent intent = new Intent(ManagerActivity.this, TrainingMaterials.class);
+            startActivity(intent);
+        }
+
+        else if(id==R.id.nav_employee_roles){
+            Intent intent = new Intent(ManagerActivity.this, EmployeeRoles.class);
             startActivity(intent);
         }
 

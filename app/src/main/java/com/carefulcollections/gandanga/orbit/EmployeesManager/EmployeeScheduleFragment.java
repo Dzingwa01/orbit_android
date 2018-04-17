@@ -1,4 +1,4 @@
-package com.carefulcollections.gandanga.orbit.Managers;
+package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,14 +25,12 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Gandanga on 2018-04-13.
+ * Created by Gandanga on 2018-04-17.
  */
 
-public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefreshListener, CalendarPickerController {
-AgendaCalendarView mAgendaCalendarView;
-    public ManagerShifts(){
+public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, CalendarPickerController {
 
-    }
+    AgendaCalendarView mAgendaCalendarView;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -51,16 +49,9 @@ AgendaCalendarView mAgendaCalendarView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_manager_shifts, container, false);
+        View v = inflater.inflate(R.layout.fragment_employee_shifts, container, false);
         mAgendaCalendarView = v.findViewById(R.id.agenda_calendar_view);
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.add_shift);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Adding a New Shift Coming Soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         Calendar minDate = Calendar.getInstance();
         Calendar maxDate = Calendar.getInstance();
 
