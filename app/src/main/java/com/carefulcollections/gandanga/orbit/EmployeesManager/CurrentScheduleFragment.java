@@ -31,6 +31,7 @@ import com.carefulcollections.gandanga.orbit.Adapters.TeamsAdapter;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
 import com.carefulcollections.gandanga.orbit.Managers.TeamsFragment;
+import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.Task;
 import com.carefulcollections.gandanga.orbit.Models.Team;
@@ -63,6 +64,7 @@ public class CurrentScheduleFragment extends Fragment {
     SwipeRefreshLayout mSwipeLayout;
     public ArrayList<Task> task_list;
     public TasksAdapter tasksAdapter;
+    public ArrayList<Item> items_list;
 
     public CurrentScheduleFragment() {
         // Required empty public constructor
@@ -79,7 +81,9 @@ public class CurrentScheduleFragment extends Fragment {
         shift_list = new ArrayList<>();
         task_list = new ArrayList<>();
         progressBar = v.findViewById(R.id.progress);
+        items_list = new ArrayList<>();
         mSwipeLayout = v.findViewById(R.id.swipeRefreshLayout);
+
         new GetEmployeeShifts().execute();
         return v;
     }
@@ -106,7 +110,6 @@ public class CurrentScheduleFragment extends Fragment {
                 UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
                 String URL = url+"api/get_current_shift/"+pref.id;
-
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -125,19 +128,20 @@ public class CurrentScheduleFragment extends Fragment {
                                     shift_list.add(shift);
 
                                 }
-                                if (shift_list.size() > 0) {
-                                    Log.d("Check","Check me");
-//                                    Collections.sort(shift_list, new TeamComparator());
-//                                    teamAdapter.notifyDataSetChanged();
-                                    setupAdapter();
-                                }
+//                                if (shift_list.size() > 0) {
+//                                    Log.d("Check","Check me");
+////                                    Collections.sort(shift_list, new TeamComparator());
+////                                    teamAdapter.notifyDataSetChanged();
+//                                    setupAdapter();
+//                                }
 
                             } else {
                                 Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),0,"none");
-                                Toast.makeText(getActivity(), "There are no shifts available yet", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getActivity(), "There are no shifts available yet", Toast.LENGTH_LONG).show();
                                 shift_list.add(shift);
-                                setupAdapter();
+//                                setupAdapter();
                             }
+                            new GetEmployeeTasks().execute();
                         } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
@@ -169,9 +173,9 @@ public class CurrentScheduleFragment extends Fragment {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(false);
+//            showProgress(false);
             Log.d("employee_tasks","check us hereee");
-            new GetEmployeeTasks().execute();
+
         }
 
         @Override
@@ -188,7 +192,7 @@ public class CurrentScheduleFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showProgress(true);
+//            showProgress(true);
 //            post_list = new ArrayList<Post>();
         }
 
@@ -220,19 +224,21 @@ public class CurrentScheduleFragment extends Fragment {
                                     task_list.add(task);
 
                                 }
-                                if (task_list.size() > 0) {
-                                    Log.d("Check","Check me");
-//                                    Collections.sort(shift_list, new TeamComparator());
-//                                    teamAdapter.notifyDataSetChanged();
-                                    setupTaskAdapter();
-                                }
+//                                if (task_list.size() > 0) {
+//                                    Log.d("Check","Check me");
+////                                    Collections.sort(shift_list, new TeamComparator());
+////                                    teamAdapter.notifyDataSetChanged();
+//                                    setupTaskAdapter();
+//                                }
 
                             } else {
-                                Task task = new Task(0,"No tasks upcoming for today","No tasks for today","",new Date(),0,new Date());
-                                Toast.makeText(getActivity(), "There are no tasks available yet", Toast.LENGTH_LONG).show();
+                                Task task = new Task(0,"No tasks for today","No tasks for today","",new Date(),0,new Date());
+//                                Toast.makeText(getActivity(), "There are no tasks available yet", Toast.LENGTH_LONG).show();
                                 task_list.add(task);
-                                setupTaskAdapter();
+                                Log.d("TaskList32",String.valueOf(task_list.size()));
+//                                setupTaskAdapter();
                             }
+                            setupAdapter();
                         } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
@@ -265,6 +271,7 @@ public class CurrentScheduleFragment extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
             showProgress(false);
+            Log.d("TaskList",String.valueOf(task_list.size()));
 
         }
 
@@ -274,11 +281,34 @@ public class CurrentScheduleFragment extends Fragment {
     }
 
     public void setupAdapter() {
-        teamAdapter = new CurrentShiftAdapter(shift_list, getActivity());
-        mLayoutManager = new LinearLayoutManager( getActivity());
-        listView.setLayoutManager(mLayoutManager);
+        for(int i=0;i<shift_list.size();i++){
+            Shift shift = shift_list.get(i);
+            if (shift.team_name == "none") {
+                Item cur = new Item(shift.shift_title,"none",shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM);
+                items_list.add(cur);
+            }else{
+                Item cur = new Item(shift.shift_title,"",shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM);
+                items_list.add(cur);
+            }
+
+        }
+        for(int i=0;i<task_list.size();i++){
+            Task task = task_list.get(i);
+            if(task.id==0){
+                Item cur = new Item(task.name,"none",task.start_date,task.end_date,task.picture_url,Item.ItemType.TWO_ITEM);
+                items_list.add(cur);
+            }
+            else{
+                Item cur = new Item(task.name,task.description,task.start_date,task.end_date,task.picture_url,Item.ItemType.TWO_ITEM);
+                items_list.add(cur);
+            }
+
+        }
+        Log.d("List_size",String.valueOf(items_list.size()));
+        ItemArrayAdapter itemArrayAdapter = new ItemArrayAdapter(items_list);
+        listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setItemAnimator(new DefaultItemAnimator());
-        listView.setAdapter(teamAdapter);
+        listView.setAdapter(itemArrayAdapter);
     }
     public void setupTaskAdapter() {
         Log.d("Output","setting tasks");
@@ -312,6 +342,7 @@ public class CurrentScheduleFragment extends Fragment {
             progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             progressBar.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
+
+}
 
 }

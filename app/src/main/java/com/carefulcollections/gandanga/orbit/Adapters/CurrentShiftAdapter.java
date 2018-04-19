@@ -65,6 +65,7 @@ public class CurrentShiftAdapter extends RecyclerView.Adapter<CurrentShiftAdapte
                 holder.shift_title.setText(WordUtils.capitalizeFully(shift.shift_title ));
                 holder.start_date.setText(shift.start_date.toString());
                 holder.end_date.setText(shift.end_date.toString());
+
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
                     @Override
