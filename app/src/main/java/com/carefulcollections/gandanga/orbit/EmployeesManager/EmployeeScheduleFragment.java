@@ -138,7 +138,7 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
                                 }
 
                             } else {
-                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),0,"none", "","","");
+                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),new Date(),0,"none", "","","");
                                 shift_list.add(shift);
                             }
                             mockList(eventList,shift_list);
@@ -209,12 +209,12 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
     private void mockList(List<CalendarEvent> eventList, List<Shift> shifts) {
         for(int i=0;i<shifts.size();i++){
             Calendar startTime1 = Calendar.getInstance();
-            startTime1.setTime(shifts.get(i).start_date);
+            startTime1.setTime(shifts.get(i).shift_date);
             String time_parts[] = shifts.get(i).start_time.split(":");
             startTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts[0]));
             startTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts[1]));
             Calendar endTime1 = Calendar.getInstance();
-            endTime1.setTime(shifts.get(i).end_date);
+            endTime1.setTime(shifts.get(i).shift_date);
             String time_parts1[] = shifts.get(i).end_time.split(":");
             endTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts1[0]));
             endTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts1[1]));

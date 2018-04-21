@@ -102,7 +102,7 @@ public class ManagerScheduleFragment extends Fragment {
                 Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
                 UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
-                String URL = url+"api/get_current_shift/"+pref.id;
+                String URL = url+"api/get_current_shifts_manager/"+pref.id;
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -123,7 +123,7 @@ public class ManagerScheduleFragment extends Fragment {
                                 }
 
                             } else {
-                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),0,"none", "","","");
+                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),new Date(),0,"none", "","","");
 //                                Toast.makeText(getActivity(), "There are no shifts available yet", Toast.LENGTH_LONG).show();
                                 shift_list.add(shift);
 //                                setupAdapter();
@@ -211,7 +211,7 @@ public class ManagerScheduleFragment extends Fragment {
                                 }
 
                             } else {
-                                Task task = new Task(0,"No tasks for today","No tasks for today","",new Date(),0,new Date(), "","");
+                                Task task = new Task(0,"No tasks for today","No tasks for today","",new Date(),new Date(),0,new Date(), "","");
 //                                Toast.makeText(getActivity(), "There are no tasks available yet", Toast.LENGTH_LONG).show();
                                 task_list.add(task);
                                 Log.d("TaskList32",String.valueOf(task_list.size()));
@@ -263,10 +263,10 @@ public class ManagerScheduleFragment extends Fragment {
         for(int i=0;i<shift_list.size();i++){
             Shift shift = shift_list.get(i);
             if (shift.team_name == "none") {
-                Item cur = new Item(shift.shift_title,"none",shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
+                Item cur = new Item(shift.shift_title,"none",shift.start_date, shift.end_date,shift.shift_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
                 items_list.add(cur);
             }else{
-                Item cur = new Item(shift.shift_title,shift.shift_description,shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
+                Item cur = new Item(shift.shift_title,shift.shift_description,shift.start_date, shift.end_date,shift.shift_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
                 items_list.add(cur);
             }
 
@@ -274,11 +274,11 @@ public class ManagerScheduleFragment extends Fragment {
         for(int i=0;i<task_list.size();i++){
             Task task = task_list.get(i);
             if(task.id==0){
-                Item cur = new Item(task.name,"none",task.start_date,task.end_date,task.picture_url,Item.ItemType.TWO_ITEM,task.start_time,task.end_time);
+                Item cur = new Item(task.name,"none",task.start_date,task.end_date,task.shift_date,task.picture_url,Item.ItemType.TWO_ITEM,task.start_time,task.end_time);
                 items_list.add(cur);
             }
             else{
-                Item cur = new Item(task.name,task.description,task.start_date,task.end_date,task.picture_url,Item.ItemType.TWO_ITEM,task.start_time,task.end_time);
+                Item cur = new Item(task.name,task.description,task.start_date,task.end_date,task.shift_date,task.picture_url,Item.ItemType.TWO_ITEM,task.start_time,task.end_time);
                 items_list.add(cur);
             }
 
