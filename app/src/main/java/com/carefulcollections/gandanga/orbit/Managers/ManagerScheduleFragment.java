@@ -1,6 +1,4 @@
-package com.carefulcollections.gandanga.orbit.EmployeesManager;
-
-
+package com.carefulcollections.gandanga.orbit.Managers;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -13,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,16 +24,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.carefulcollections.gandanga.orbit.Adapters.*;
-import com.carefulcollections.gandanga.orbit.Adapters.TeamsAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.CurrentShiftAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.ItemArrayAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.TasksAdapter;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.CurrentScheduleFragment;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
-import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
-import com.carefulcollections.gandanga.orbit.Managers.TeamsFragment;
 import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.Task;
-import com.carefulcollections.gandanga.orbit.Models.Team;
-import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.carefulcollections.gandanga.orbit.R;
 import com.google.gson.Gson;
@@ -48,15 +44,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * Created by Gandanga on 2018-04-21.
  */
-public class CurrentScheduleFragment extends Fragment {
 
+public class ManagerScheduleFragment extends Fragment {
     private RecyclerView listView;
     private CurrentShiftAdapter teamAdapter;
     private ArrayList<Shift> shift_list;
@@ -67,7 +61,7 @@ public class CurrentScheduleFragment extends Fragment {
     public TasksAdapter tasksAdapter;
     public ArrayList<Item> items_list;
 
-    public CurrentScheduleFragment() {
+    public ManagerScheduleFragment() {
         // Required empty public constructor
     }
 
@@ -75,8 +69,7 @@ public class CurrentScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View v = inflater.inflate(R.layout.fragment_current_schedule, container, false);
+        View v = inflater.inflate(R.layout.fragment_admin_current_schedule, container, false);
         listView = v.findViewById(R.id.current_shift);
         shift_list = new ArrayList<>();
         task_list = new ArrayList<>();
@@ -90,9 +83,9 @@ public class CurrentScheduleFragment extends Fragment {
 
     public class GetEmployeeShifts extends AsyncTask<Void, Void, Boolean> {
 
-      public GetEmployeeShifts(){
+        public GetEmployeeShifts(){
 
-      }
+        }
 
         @Override
         protected void onPreExecute() {
@@ -128,12 +121,6 @@ public class CurrentScheduleFragment extends Fragment {
                                     shift_list.add(shift);
 
                                 }
-//                                if (shift_list.size() > 0) {
-//                                    Log.d("Check","Check me");
-////                                    Collections.sort(shift_list, new TeamComparator());
-////                                    teamAdapter.notifyDataSetChanged();
-//                                    setupAdapter();
-//                                }
 
                             } else {
                                 Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),0,"none", "","","");
@@ -146,8 +133,6 @@ public class CurrentScheduleFragment extends Fragment {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
                             showProgress(false);
-//                            Intent intent = new Intent(getActivity(),ManagerActivity.class);
-//                            startActivity(intent);
                         }
 
                     }
@@ -224,12 +209,6 @@ public class CurrentScheduleFragment extends Fragment {
                                     task_list.add(task);
 
                                 }
-//                                if (task_list.size() > 0) {
-//                                    Log.d("Check","Check me");
-////                                    Collections.sort(shift_list, new TeamComparator());
-////                                    teamAdapter.notifyDataSetChanged();
-//                                    setupTaskAdapter();
-//                                }
 
                             } else {
                                 Task task = new Task(0,"No tasks for today","No tasks for today","",new Date(),0,new Date(), "","");
@@ -343,6 +322,5 @@ public class CurrentScheduleFragment extends Fragment {
             progressBar.setVisibility(show ? View.GONE : View.VISIBLE);
         }
 
-}
-
+    }
 }

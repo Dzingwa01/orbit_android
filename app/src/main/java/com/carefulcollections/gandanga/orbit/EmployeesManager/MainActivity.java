@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CurrentScheduleFragment(), "Current");
+        adapter.addFragment(new CurrentScheduleFragment(), "Today");
         adapter.addFragment(new EmployeeScheduleFragment(), "Schedule");
         adapter.addFragment(new ChatFragment(), "Chat");
         adapter.addFragment(new InboxFragment(), "Inbox");

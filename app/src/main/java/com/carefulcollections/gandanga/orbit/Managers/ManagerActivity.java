@@ -368,9 +368,9 @@ public class ManagerActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new ManagerScheduleFragment(), "Current");
         adapter.addFragment(new ManagerShifts(), "Shifts");
         adapter.addFragment(new TeamsFragment(), "Teams");
-
         adapter.addFragment(new InboxFragment(), "Inbox");
         viewPager.setAdapter(adapter);
     }

@@ -1,6 +1,5 @@
 package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -27,16 +26,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.carefulcollections.gandanga.orbit.Adapters.*;
-import com.carefulcollections.gandanga.orbit.Adapters.TeamsAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.CurrentShiftAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.ItemArrayAdapter;
+import com.carefulcollections.gandanga.orbit.Adapters.TasksAdapter;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
-import com.carefulcollections.gandanga.orbit.Managers.TeamsFragment;
 import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.Task;
-import com.carefulcollections.gandanga.orbit.Models.Team;
-import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.carefulcollections.gandanga.orbit.R;
 import com.google.gson.Gson;
@@ -48,14 +45,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * Created by Gandanga on 2018-04-19.
  */
-public class CurrentScheduleFragment extends Fragment {
+
+public class AdminCurrentSchedule extends Fragment {
 
     private RecyclerView listView;
     private CurrentShiftAdapter teamAdapter;
@@ -67,7 +63,7 @@ public class CurrentScheduleFragment extends Fragment {
     public TasksAdapter tasksAdapter;
     public ArrayList<Item> items_list;
 
-    public CurrentScheduleFragment() {
+    public AdminCurrentSchedule() {
         // Required empty public constructor
     }
 
@@ -90,9 +86,9 @@ public class CurrentScheduleFragment extends Fragment {
 
     public class GetEmployeeShifts extends AsyncTask<Void, Void, Boolean> {
 
-      public GetEmployeeShifts(){
+        public GetEmployeeShifts(){
 
-      }
+        }
 
         @Override
         protected void onPreExecute() {
@@ -144,10 +140,8 @@ public class CurrentScheduleFragment extends Fragment {
                             new GetEmployeeTasks().execute();
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             showProgress(false);
-//                            Intent intent = new Intent(getActivity(),ManagerActivity.class);
-//                            startActivity(intent);
                         }
 
                     }
@@ -174,7 +168,7 @@ public class CurrentScheduleFragment extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
 //            showProgress(false);
-
+            Log.d("employee_tasks","check us hereee");
 
         }
 
@@ -243,8 +237,8 @@ public class CurrentScheduleFragment extends Fragment {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
                             showProgress(false);
-//                            Intent intent = new Intent(getActivity(),MainActivity.class);
-//                            startActivity(intent);
+                            Intent intent = new Intent(getActivity(),MainActivity.class);
+                            startActivity(intent);
                         }
 
                     }
@@ -287,7 +281,7 @@ public class CurrentScheduleFragment extends Fragment {
                 Item cur = new Item(shift.shift_title,"none",shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
                 items_list.add(cur);
             }else{
-                Item cur = new Item(shift.shift_title,shift.shift_description,shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
+                Item cur = new Item(shift.shift_title,"",shift.start_date, shift.end_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
                 items_list.add(cur);
             }
 
@@ -343,6 +337,5 @@ public class CurrentScheduleFragment extends Fragment {
             progressBar.setVisibility(show ? View.GONE : View.VISIBLE);
         }
 
-}
-
+    }
 }

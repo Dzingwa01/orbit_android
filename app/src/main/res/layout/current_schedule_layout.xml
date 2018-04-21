@@ -40,15 +40,13 @@
                         <TextView
                             android:id="@+id/shift_title"
                             android:layout_width="wrap_content"
+                            android:maxLines="3"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
                             android:textColor="@android:color/black"
                             android:textSize="18dp"
                             android:textStyle="bold"/>
                     </LinearLayout>
-
-
-
                     <TextView
                         android:id="@+id/start_date"
                         android:layout_width="wrap_content"
@@ -67,19 +65,20 @@
                         android:textColor="@android:color/black"
                         android:textSize="18dp"
                         android:text=""/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/shift_creator"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_marginBottom="5dp"-->
+                        <!--android:layout_marginStart="5dp"-->
+                        <!--android:textColor="@android:color/black"-->
+                        <!--android:textSize="18dp"-->
+                        <!--android:text=""/>-->
                     <TextView
-                        android:id="@+id/shift_creator"
+                        android:id="@+id/shift_description"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginStart="5dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="18dp"
-                        android:text=""/>
-                    <TextView
-                        android:id="@+id/shift_duration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginStart="5dp"
                         android:textColor="@android:color/black"

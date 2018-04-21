@@ -1,9 +1,5 @@
 package com.carefulcollections.gandanga.orbit.Adapters;
 
-/**
- * Created by Gandanga on 2018-04-19.
- */
-
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +8,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carefulcollections.gandanga.orbit.Models.Item;
-import com.carefulcollections.gandanga.orbit.Models.Shift;
-import com.carefulcollections.gandanga.orbit.Models.Task;
 import com.carefulcollections.gandanga.orbit.R;
 
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 
-public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+/**
+ * Created by Gandanga on 2018-04-19.
+ */
+
+public class AdminItemArrayAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_ONE = 1;
     private static final int TYPE_TWO = 2;
 
     private ArrayList<Item> itemList;
 
     // Constructor of the class
-    public ItemArrayAdapter(ArrayList<Item> itemList) {
+    public AdminItemArrayAdapter(ArrayList<Item> itemList) {
         this.itemList = itemList;
     }
 
@@ -57,11 +55,11 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (viewType == TYPE_ONE) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.current_schedule_layout, parent, false);
-            return new ViewHolderOne(view);
+            return new ItemArrayAdapter.ViewHolderOne(view);
         } else if (viewType == TYPE_TWO) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.current_tasks_layout, parent, false);
-            return new ViewHolderTwo(view);
+            return new ItemArrayAdapter.ViewHolderTwo(view);
         } else {
             throw new RuntimeException("The type has to be ONE or TWO");
         }
@@ -72,58 +70,57 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int listPosition) {
         switch (holder.getItemViewType()) {
             case TYPE_ONE:
-                initLayoutOne((ViewHolderOne) holder, listPosition);
+                initLayoutOne((ItemArrayAdapter.ViewHolderOne) holder, listPosition);
                 break;
             case TYPE_TWO:
-                initLayoutTwo((ViewHolderTwo) holder, listPosition);
+                initLayoutTwo((ItemArrayAdapter.ViewHolderTwo) holder, listPosition);
                 break;
             default:
                 break;
         }
     }
 
-    private void initLayoutOne(ViewHolderOne holder, int pos) {
+    private void initLayoutOne(ItemArrayAdapter.ViewHolderOne holder, int pos) {
         final Item shift = itemList.get(pos);
         if (shift != null) {
-            if (shift.item_description == "none") {
-                holder.shift_title.setText(WordUtils.capitalizeFully(shift.item_name));
-            } else {
-                holder.shift_title.setText(WordUtils.capitalizeFully(shift.item_name));
-                holder.start_date.setText("Start Time: "+shift.start_time.toString());
-                holder.end_date.setText("End Time: "+ shift.end_time.toString());
-                holder.shift_description.setText(shift.item_description);
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-            }
+//            if (shift.item_description == "none") {
+//                holder.shift_title.setText(WordUtils.capitalizeFully(shift.item_name));
+//            } else {
+//                holder.shift_title.setText(WordUtils.capitalizeFully(shift.item_name));
+//                holder.start_date.setText(shift.item_start_date.toString());
+//                holder.end_date.setText(shift.item_end_date.toString());
+//                holder.itemView.setOnClickListener(new View.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(View v) {
+//                    }
+//                });
+//            }
 
         }
 
     }
 
-    private void initLayoutTwo(ViewHolderTwo holder, int pos) {
+    private void initLayoutTwo(ItemArrayAdapter.ViewHolderTwo holder, int pos) {
         final Item task = itemList.get(pos);
 
         if (task != null) {
-            if(task.item_description=="none"){
-                holder.task_name.setText(task.item_name);
-            }
-            else{
-                holder.task_name.setText(task.item_name);
-                holder.task_description.setText(task.item_description);
-                holder.start_date.setText(task.item_start_date.toString());
-                holder.end_date.setText(task.item_end_date.toString());
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-            }
+//            if(task.item_description=="none"){
+//                holder.task_name.setText(task.item_name);
+//            }
+//            else{
+//                holder.task_name.setText(task.item_name);
+//                holder.task_description.setText(task.item_description);
+//                holder.start_date.setText(task.item_start_date.toString());
+//                holder.end_date.setText(task.item_end_date.toString());
+//                holder.itemView.setOnClickListener(new View.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                });
+//            }
 
         }
     }
@@ -131,12 +128,11 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Static inner class to initialize the views of rows
     static class ViewHolderOne extends RecyclerView.ViewHolder {
-        private TextView shift_title;
-        private TextView start_date;
-        private TextView end_date;
-        private TextView shift_description;
+        TextView shift_title;
+        public TextView start_date;
+        public TextView end_date;
         double shift_duration;
-        private ImageView user_picture_url;
+        public ImageView user_picture_url;
 
         public ViewHolderOne(View v) {
             super(v);
@@ -144,16 +140,15 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             start_date = v.findViewById(R.id.start_date);
             user_picture_url = v.findViewById(R.id.profile_picture);
             end_date = v.findViewById(R.id.end_date);
-            shift_description = v.findViewById(R.id.shift_description);
         }
     }
 
     static class ViewHolderTwo extends RecyclerView.ViewHolder {
-        private TextView task_name;
-        private TextView task_description;
-        private TextView end_date;
-        private TextView start_date;
-        private ImageView picture_url;
+        public TextView task_name;
+        public TextView task_description;
+        public TextView end_date;
+        public TextView start_date;
+        public ImageView picture_url;
 
         public ViewHolderTwo(View v) {
             super(v);
