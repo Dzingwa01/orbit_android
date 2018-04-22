@@ -116,6 +116,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
         </activity>
+        <activity
+            android:name=".EmployeesManager.MyProfile"
+            android:label="@string/title_activity_my_profile"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".EmployeesManager.EditProfile"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName=".EmployeesManager.MyProfile"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MyProfile"/>
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.carefulcollections.gandanga.orbit.EmployeesManager.EditProfile"
+    tools:showIn="@layout/activity_edit_profile">
+
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
+    <!-- :nextFocusUp and :nextFocusLeft have been set to the id of this component
+    to prevent the dummy from receiving focus again -->
+    <AutoCompleteTextView
+        android:id="@+id/autotext"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:nextFocusUp="@id/autotext"
+        android:visibility="gone"
+        android:nextFocusLeft="@id/autotext"/>
+    <!-- TODO: Update blank fragment layout -->
+     <LinearLayout
+        android:id="@+id/user_register_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="16dp"
+             android:gravity="center_horizontal"
+             android:orientation="horizontal">
+
+             <de.hdodenhof.circleimageview.CircleImageView
+                 android:id="@+id/edit_profile_picture"
+                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                 android:layout_width="120dp"
+                 android:layout_height="120dp"
+                 android:layout_gravity="center_horizontal"
+                 android:layout_marginLeft="16dp"
+                 android:layout_marginTop="16dp"
+                 android:src="@drawable/placeholder"
+                 app:civ_border_color="@color/black"
+                 app:civ_border_width="1dp"/>
+             <android.support.design.widget.FloatingActionButton
+                 android:id="@+id/upload_new_image"
+                 android:layout_width="50dp"
+                 android:layout_height="50dp"
+                 android:layout_gravity="right|center_vertical"
+                 app:srcCompat="@android:drawable/ic_menu_camera"/>
+         </LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="First Name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Last Name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"/>
+        </android.support.design.widget.TextInputLayout>
+
+       <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Contact Number"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Select Gender"
+            android:textColor="@color/black"/>
+
+        <Spinner
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            style="@style/spinner_style"
+            android:entries="@array/gender"
+            android:spinnerMode="dialog"/>
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

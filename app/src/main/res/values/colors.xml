@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#05001b</color>
     <color name="colorAccent">#BE1E2D</color>
     <color name="white">#fff</color>
+    <color name="black">#000</color>
     <color name="black_overlay">#564b6c</color>
     <color name="orange_dark">#E64A19</color>
     <color name="blue_dark">#00537F</color>

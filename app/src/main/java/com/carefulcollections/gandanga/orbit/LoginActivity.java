@@ -384,7 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 sp.edit().putString("password", mPassword).apply();
                                 int role_id = response.optInt("role_id");
                                 sp.edit().putInt("role_id", role_id).apply();
-                                UserPref prefs = new UserPref(response.optString("id"),role_id, response.optString("name"), response.optString("surname"), mEmail, response.optString("contact_number"),response.optString("gender"), response.optString("picture_url"),response.optString("city"));
+                                UserPref prefs = new UserPref(response.optString("id"),role_id, response.optString("name"), response.optString("surname"), mEmail, response.optString("contact_number"),response.optString("gender"), response.optString("picture_url"),response.optString("city"),response.optString("package_name"),response.optString("company_name"));
                                 EasyPreference.with(getApplicationContext())
                                         .addObject("user_pref", prefs)
                                         .save();

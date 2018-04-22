@@ -179,6 +179,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, EmployeeTeams.class);
             startActivity(intent);
         }
+        else if(id == R.id.nav_profile){
+            Intent intent = new Intent(MainActivity.this, MyProfile.class);
+            startActivity(intent);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
