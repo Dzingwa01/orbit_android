@@ -1,9 +1,11 @@
 package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         hView = navigationView.getHeaderView(0);
-        Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("user_pref", Credentials.class);
+        Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("server_details", Credentials.class);
         Base_URL = credentials.server_url;
         back_pressed_count = 0;
         UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
@@ -87,8 +89,24 @@ public class MainActivity extends AppCompatActivity
         user_details.setText(name + "  " + surname);
         user_email_textview.setText(email);
         first_name = name;//
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
     }
 
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    @TargetApi(23)
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

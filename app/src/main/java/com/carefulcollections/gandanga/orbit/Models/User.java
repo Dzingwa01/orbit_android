@@ -15,9 +15,11 @@ public class User implements Serializable {
     public String picture_url;
     public String creator_id;
     public String company_name;
+    public int id;
 
-    public User(String name, String surname, String email, String contact_number, String gender, String picture_url, String creator_id, String company_name){
+    public User(int id, String name, String surname, String email, String contact_number, String gender, String picture_url, String creator_id, String company_name){
         this.name = name;
+        this.id = id;
         this.surname = surname;
         this.email =email;
         this.contact_number = contact_number;

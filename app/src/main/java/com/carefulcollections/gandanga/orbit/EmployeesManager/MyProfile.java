@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.carefulcollections.gandanga.orbit.R;
 import com.ceylonlabs.imageviewpopup.ImagePopup;
@@ -37,6 +38,8 @@ public class MyProfile extends AppCompatActivity {
         user_email = findViewById(R.id.user_email);
         profile_picture = findViewById(R.id.profile_picture);
         UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
+        Credentials credentials = EasyPreference.with(MyProfile.this).getObject("server_details", Credentials.class);
+        final String url = credentials.server_url;
 
         user_fullname.setText(pref.first_name + " " + pref.last_name);
         gender.setText(pref.gender);
@@ -44,7 +47,7 @@ public class MyProfile extends AppCompatActivity {
         package_name.setText(pref.package_name);
         company_name.setText(pref.company_name);
         user_email.setText(pref.email);
-        Picasso.with(getApplicationContext()).load(pref.picture_url).placeholder(R.drawable.placeholder).into(profile_picture);
+        Picasso.with(getApplicationContext()).load(url+pref.picture_url).placeholder(R.drawable.placeholder).into(profile_picture);
         final ImagePopup imagePopup = new ImagePopup(MyProfile.this);
         imagePopup.setWindowHeight(400); // Optional
         imagePopup.setWindowWidth(400); // Optional

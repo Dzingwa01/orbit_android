@@ -393,7 +393,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 mPasswordView.setText("");
                                 if(role_id==3){
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    String image_url = Base_URL+"photos" + response.optString("picture_url");
+                                    String image_url = Base_URL+response.optString("picture_url");
                                     intent.putExtra("picture_url", image_url);
                                     startActivity(intent);
                                 }
