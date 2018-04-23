@@ -20,6 +20,10 @@
             android:id="@+id/nav_chat"
             android:icon="@drawable/ic_chat_black_24px"
             android:title="Communications"/>
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_circle_black_24px"
+            android:title="My Profile"/>
     </group>
 
     <item android:title="Employee Management">

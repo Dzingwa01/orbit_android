@@ -47,7 +47,9 @@
 
     <string-array name="gender">
 
-        <item>Male</item>
-        <item>Female</item>
+        <item>male</item>
+        <item>female</item>
     </string-array>
+    <string name="title_activity_manager_profile">Manager Profile</string>
+    <string name="title_activity_manager_edit_profile">Edit Profile</string>
 </resources>

@@ -90,7 +90,7 @@ public class ManagerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         hView = navigationView.getHeaderView(0);
-        Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("user_pref", Credentials.class);
+        Credentials credentials = EasyPreference.with(getApplicationContext()).getObject("server_details", Credentials.class);
         Base_URL = credentials.server_url;
         back_pressed_count = 0;
         UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
@@ -111,7 +111,7 @@ public class ManagerActivity extends AppCompatActivity
         Picasso.with(getApplicationContext()).load(Base_URL+picture_url).placeholder(R.drawable.placeholder).into(img);
         user_details.setText(name + "  " + surname);
         user_email_textview.setText(email);
-        first_name = name;//
+        first_name = name;
 
         sp = getSharedPreferences("login", MODE_PRIVATE);
         //Log.d("Payments", "Payments");
@@ -214,7 +214,10 @@ public class ManagerActivity extends AppCompatActivity
             Intent intent = new Intent(ManagerActivity.this, EmployeeRoles.class);
             startActivity(intent);
         }
-
+        else if(id==R.id.nav_profile){
+            Intent intent = new Intent(ManagerActivity.this, ManagerProfile.class);
+            startActivity(intent);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

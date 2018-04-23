@@ -16,10 +16,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.EditProfile;
+import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Managers.EmployeeProfile;
 import com.carefulcollections.gandanga.orbit.Models.User;
 import com.carefulcollections.gandanga.orbit.R;
 import com.ceylonlabs.imageviewpopup.ImagePopup;
+import com.iamhabib.easy_preference.EasyPreference;
 //import com.ceylonlabs.imageviewpopup.ImagePopup;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -67,7 +70,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
                         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
                         requestOptions.placeholder(R.drawable.placeholder);
                         requestOptions.centerCrop();
-                        Glide.with(ctx).load( picture_url)
+                        Credentials credentials = EasyPreference.with(ctx).getObject("server_details", Credentials.class);
+//        UserPref local_pref = EasyPreference.with(EditProfile.this).getObject("user_pref", UserPref.class);
+                        final String url = credentials.server_url;
+                        Glide.with(ctx).load( url+picture_url)
                                 .apply(requestOptions)
                                 .into(holder.user_picture_url);
                         final ImagePopup imagePopup = new ImagePopup(ctx);
