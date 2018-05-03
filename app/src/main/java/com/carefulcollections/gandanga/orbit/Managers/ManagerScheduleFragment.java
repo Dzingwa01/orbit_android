@@ -189,7 +189,7 @@ public class ManagerScheduleFragment extends Fragment {
                 Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
                 UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
-                String URL = url+"api/get_current_tasks/"+pref.id;
+                String URL = url+"api/get_current_tasks_manager/"+pref.id;
 
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override

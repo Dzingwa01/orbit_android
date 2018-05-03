@@ -23,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.carefulcollections.gandanga.orbit.ChatFragment;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.R;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;

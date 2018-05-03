@@ -146,6 +146,7 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
                             showProgress(false);
+                            mockList(eventList,shift_list);
                         }
 
                     }

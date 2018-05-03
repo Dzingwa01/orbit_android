@@ -201,10 +201,10 @@ public class ManagerActivity extends AppCompatActivity
             Intent intent = new Intent(ManagerActivity.this, EmployeeProfile.class);
             startActivity(intent);
         }
-        else if(id==R.id.nav_manage_teams){
-            Intent intent = new Intent(ManagerActivity.this, ManageTeams.class);
-            startActivity(intent);
-        }
+//        else if(id==R.id.nav_manage_teams){
+//            Intent intent = new Intent(ManagerActivity.this, ManageTeams.class);
+//            startActivity(intent);
+//        }
         else if(id==R.id.nav_training_material){
             Intent intent = new Intent(ManagerActivity.this, TrainingMaterials.class);
             startActivity(intent);

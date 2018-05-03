@@ -4,14 +4,14 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_schedule_management"
-            android:icon="@drawable/ic_av_timer_black_24px"
-            android:title="Schedule Management"/>
-        <item
-            android:id="@+id/nav_manage_teams"
-            android:icon="@drawable/ic_assignment_ind_black_24px"
-            android:title="Manage Teams"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_schedule_management"-->
+            <!--android:icon="@drawable/ic_av_timer_black_24px"-->
+            <!--android:title="Schedule Management"/>-->
+        <!--<item-->
+            <!--android:id="@+id/nav_manage_teams"-->
+            <!--android:icon="@drawable/ic_assignment_ind_black_24px"-->
+            <!--android:title="Manage Teams"/>-->
         <item
             android:id="@+id/nav_training_material"
             android:icon="@drawable/ic_create_new_folder_black_24px"

@@ -161,6 +161,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerProfile"/>
         </activity>
+        <activity
+            android:name=".Helpers.ImageFullScreen"
+            android:label="@string/title_activity_image_full_screen"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

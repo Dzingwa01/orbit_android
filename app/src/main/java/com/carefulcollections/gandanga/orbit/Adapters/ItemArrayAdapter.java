@@ -114,8 +114,8 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             else{
                 holder.task_name.setText(task.item_name);
                 holder.task_description.setText(task.item_description);
-                holder.start_date.setText(task.item_start_date.toString());
-                holder.end_date.setText(task.item_end_date.toString());
+                holder.start_date.setText("Start Time: "+ task.start_time.toString());
+                holder.end_date.setText("End Time: "+task.end_time.toString());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
                     @Override

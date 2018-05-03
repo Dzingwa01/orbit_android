@@ -156,6 +156,7 @@ public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefr
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
                             showProgress(false);
+                            mockList(eventList,shift_list);
                         }
 
                     }
