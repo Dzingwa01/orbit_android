@@ -93,7 +93,7 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
         shift_list = new ArrayList<>();
 
         progressBar = v.findViewById(R.id.progress);
-
+//        mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
         new GetEmployeeShifts().execute();
 
         return v;
@@ -125,7 +125,7 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray response_obj = response.getJSONArray("shifts");
-                            Log.d("Response",response_obj.toString());
+                            Log.d("Response2",response_obj.toString());
                             if (response_obj.length() > 0) {
 //
                                 for (int i = 0; i < response_obj.length(); i++) {
@@ -137,14 +137,12 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
                                     shift_list.add(shift);
                                 }
 
-                            } else {
-                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),new Date(),0,"none", "","","");
-                                shift_list.add(shift);
                             }
                             mockList(eventList,shift_list);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
+                            Log.d("Error2",e.getMessage());
+//                            Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
                             showProgress(false);
                             mockList(eventList,shift_list);
                         }
@@ -208,22 +206,29 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
 
     }
     private void mockList(List<CalendarEvent> eventList, List<Shift> shifts) {
-        for(int i=0;i<shifts.size();i++){
-            Calendar startTime1 = Calendar.getInstance();
-            startTime1.setTime(shifts.get(i).shift_date);
-            String time_parts[] = shifts.get(i).start_time.split(":");
-            startTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts[0]));
-            startTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts[1]));
-            Calendar endTime1 = Calendar.getInstance();
-            endTime1.setTime(shifts.get(i).shift_date);
-            String time_parts1[] = shifts.get(i).end_time.split(":");
-            endTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts1[0]));
-            endTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts1[1]));
-            BaseCalendarEvent event1 = new BaseCalendarEvent(shifts.get(i).shift_title, shifts.get(i).shift_description, "",
-                    ContextCompat.getColor(this.getContext(), R.color.orange_dark), startTime1, endTime1, false);
-            eventList.add(event1);
+        if(shifts.size()>0){
+            for(int i=0;i<shifts.size();i++){
+                Calendar startTime1 = Calendar.getInstance();
+                startTime1.setTime(shifts.get(i).shift_date);
+                String time_parts[] = shifts.get(i).start_time.split(":");
+                startTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts[0]));
+                startTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts[1]));
+                Calendar endTime1 = Calendar.getInstance();
+                endTime1.setTime(shifts.get(i).shift_date);
+                String time_parts1[] = shifts.get(i).end_time.split(":");
+                endTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts1[0]));
+                endTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts1[1]));
+                BaseCalendarEvent event1 = new BaseCalendarEvent(shifts.get(i).shift_title, shifts.get(i).shift_description, "",
+                        ContextCompat.getColor(this.getContext(), R.color.orange_dark), startTime1, endTime1, false);
+                eventList.add(event1);
+            }
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
         }
-        mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
+        else{
+            mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
+        }
+
+
 
 //        Calendar startTime2 = Calendar.getInstance();
 //        startTime2.add(Calendar.DAY_OF_YEAR, 1);

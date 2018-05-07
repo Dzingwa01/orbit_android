@@ -147,9 +147,6 @@ public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefr
                                     shift_list.add(shift);
                                 }
 
-                            } else {
-                                Shift shift = new Shift("No shifts upcoming for today",new Date(),new Date(),new Date(),0,"none", "","","");
-                                shift_list.add(shift);
                             }
                             mockList(eventList,shift_list);
                         } catch (Exception e) {
@@ -218,20 +215,22 @@ public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefr
 
     }
     private void mockList(List<CalendarEvent> eventList, List<Shift> shifts) {
-        for(int i=0;i<shifts.size();i++){
-            Calendar startTime1 = Calendar.getInstance();
-            startTime1.setTime(shifts.get(i).start_date);
-            String time_parts[] = shifts.get(i).start_time.split(":");
-            startTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts[0]));
-            startTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts[1]));
-            Calendar endTime1 = Calendar.getInstance();
-            endTime1.setTime(shifts.get(i).end_date);
-            String time_parts1[] = shifts.get(i).end_time.split(":");
-            endTime1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time_parts1[0]));
-            endTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts1[1]));
-            BaseCalendarEvent event1 = new BaseCalendarEvent(shifts.get(i).shift_title, shifts.get(i).shift_description, "",
-                    ContextCompat.getColor(this.getContext(), R.color.orange_dark), startTime1, endTime1, false);
-            eventList.add(event1);
+        if(shifts.size()>0) {
+            for (int i = 0; i < shifts.size(); i++) {
+                Calendar startTime1 = Calendar.getInstance();
+                startTime1.setTime(shifts.get(i).start_date);
+                String time_parts[] = shifts.get(i).start_time.split(":");
+                startTime1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time_parts[0]));
+                startTime1.set(Calendar.MINUTE, Integer.parseInt(time_parts[1]));
+                Calendar endTime1 = Calendar.getInstance();
+                endTime1.setTime(shifts.get(i).end_date);
+                String time_parts1[] = shifts.get(i).end_time.split(":");
+                endTime1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time_parts1[0]));
+                endTime1.set(Calendar.MINUTE, Integer.parseInt(time_parts1[1]));
+                BaseCalendarEvent event1 = new BaseCalendarEvent(shifts.get(i).shift_title, shifts.get(i).shift_description, "",
+                        ContextCompat.getColor(this.getContext(), R.color.orange_dark), startTime1, endTime1, false);
+                eventList.add(event1);
+            }
         }
         mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
 

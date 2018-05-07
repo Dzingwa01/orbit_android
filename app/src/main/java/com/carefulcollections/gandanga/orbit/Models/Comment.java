@@ -13,10 +13,11 @@ public class Comment {
     public String first_name;
     public String last_name;
     public String created_at;
+    public String user_picture_url;
     public String picture_url;
     public int likes;
 
-    public Comment(int id, int user_id, int team_id, String comment_text, String first_name, String last_name, String created_at, String picture_url ){
+    public Comment(int id, int user_id, int team_id, String comment_text, String first_name, String last_name, String created_at, String picture_url, String user_picture_url ){
         this.id=id;
         this.user_id = user_id;
         this.team_id = team_id;
@@ -25,6 +26,7 @@ public class Comment {
         this.last_name = last_name;
         this.created_at = created_at;
         this.picture_url = picture_url;
+        this.user_picture_url = user_picture_url;
     }
 
 }

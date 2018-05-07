@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Helpers.ImageFullScreen;
 import com.carefulcollections.gandanga.orbit.Models.Comment;
 import com.carefulcollections.gandanga.orbit.R;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Gandanga on 2018-05-02.
@@ -42,15 +45,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         TextView full_name;
         RelativeTimeTextView publication_date;
         ImageView comment_image, img;
+        CircleImageView profile_picture_post_comment;
         ExpandableTextView article_text;
 
         public MyViewHolder(View v) {
             super(v);
-            full_name = (TextView) v.findViewById(R.id.full_name);
+            full_name = (TextView) v.findViewById(R.id.user_fullname);
             publication_date = v.findViewById(R.id.publication_date);
             img = v.findViewById(R.id.profile_picture_post_comment);
             comment_image = v.findViewById(R.id.comment_image);
             article_text = (ExpandableTextView) v.findViewById(R.id.expand_text_view);
+            profile_picture_post_comment = v.findViewById(R.id.profile_picture_post_comment);
         }
     }
 
@@ -71,7 +76,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         final Comment comment = comments.get(position);
         holder.article_text.setText(comment.comment_text);
         holder.full_name.setText(comment.first_name + " " + comment.last_name);
-
+        Credentials credentials = EasyPreference.with(this.ctx).getObject("server_details", Credentials.class);
+        final String url = credentials.server_url;
+        Glide.with(ctx.getApplicationContext()).load(url + comment.user_picture_url)
+                .into(holder.profile_picture_post_comment);
         if (comment.created_at != null) {
             long now = System.currentTimeMillis();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -88,30 +96,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             }
 
         }
-//        UsersPicturesPref pref = EasyPreference.with(ctx.getApplicationContext()).getObject("users_pictures", UsersPicturesPref.class);
-//        for (int i = 0; i < pref.user_pictures.size(); i++) {
-//            UserPictures user_picture = pref.user_pictures.get(i);
-//            if (comment.author_id.equals(user_picture._id)) {
-//                try {
-//                    RequestOptions requestOptions = new RequestOptions();
-//                    requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
-//                    requestOptions.placeholder(R.drawable.placeholder);
-//                    requestOptions.centerCrop();
-//                    String picture_url = user_picture.picture_url;
-//                    Glide.with(ctx.getApplicationContext()).load("http://ec2-18-220-230-232.us-east-2.compute.amazonaws.com/" + picture_url)
-//                            .apply(requestOptions)
-//                            .into(holder.img);
-//
-//                } catch (Exception e) {
-//                    //Log.d("No pictures", "no picture as yet");
-//                    Glide.with(ctx.getApplicationContext()).load(R.drawable.placeholder)
-//                            .into(holder.img);
-//                }
-//            }
-//        }
         try {
+
             if (!comment.picture_url.equals("none")) {
-                Glide.with(ctx.getApplicationContext()).load("http://ec2-18-220-230-232.us-east-2.compute.amazonaws.com/" + comment.picture_url)
+                Glide.with(ctx.getApplicationContext()).load(url+ comment.picture_url)
                         .into(holder.comment_image);
                 holder.comment_image.setOnClickListener(new View.OnClickListener() {
                     @Override

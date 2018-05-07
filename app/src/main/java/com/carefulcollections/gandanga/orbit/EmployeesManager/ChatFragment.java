@@ -18,8 +18,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -53,6 +55,8 @@ import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Helpers.VolleyMultipartRequest;
 import com.carefulcollections.gandanga.orbit.Helpers.VolleySingleton;
 import com.carefulcollections.gandanga.orbit.Models.Comment;
+import com.carefulcollections.gandanga.orbit.Models.Team;
+import com.carefulcollections.gandanga.orbit.Models.TeamComparator;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.carefulcollections.gandanga.orbit.R;
 import com.google.gson.Gson;
@@ -76,6 +80,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,6 +104,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     ProgressBar comments_progress;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recyclerView;
+    View view;
 
     @Override
     public void onRefresh() {
@@ -114,24 +120,25 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_chat, container, false);
+        view =v;
         comments_progress = v.findViewById(R.id.comments_progress);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager((getActivity()));
 //        mainListView = findViewById(R.id.mainListView);
         imageString = "none";
         image_string = "none";
-
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
         content = "";
         post_list = new ArrayList<Comment>();
-        new GetComments().execute();
+        new GetTeams().execute();
         message_area = v.findViewById(R.id.message_area);
         send_button = v.findViewById(R.id.sendButton);
         picture_attachement = v.findViewById(R.id.picture_attachement);
@@ -146,6 +153,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             }
         });
+        final FragmentActivity activity = getActivity();
         picture_attachement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,14 +168,15 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
                 //Log.d("Message", "message");
-                //Log.d("Triggered", data);
+//                Log.d("Triggered", data);
                 JsonParser parser = new JsonParser();
                 JsonElement element = parser.parse(data);
                 Gson gson = new Gson();
                 Comment user_comment = gson.fromJson(element, Comment.class);
                 if (!post_list.contains(user_comment)) {
+                    Log.d("Contained","Yes not contained");
                     post_list.add(0, user_comment);
-                    getActivity().runOnUiThread(new Runnable() {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             setupAdapter();
@@ -207,30 +216,14 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void cameraIntent() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                //Log.d("Perminssion_grant", "Granted Permissions");
-                CropImage.activity()
-                        .setAspectRatio(3, 4)
-                        .setRequestedSize(600, 800, CropImageView.RequestSizeOptions.RESIZE_FIT)
-                        .start(getActivity());
-            } else {
-                CropImage.activity()
-                        .setAspectRatio(3, 4)
-                        .setRequestedSize(600, 800, CropImageView.RequestSizeOptions.RESIZE_FIT)
-                        .start(getActivity());
-            }
-        } else {
-            CropImage.activity()
-                    .setAspectRatio(3, 4)
-                    .setRequestedSize(600, 800, CropImageView.RequestSizeOptions.RESIZE_FIT)
-                    .start(getActivity());
-        }
+        CropImage.activity()
+                .setAspectRatio(4, 5)
+                .setRequestedSize(600, 400, CropImageView.RequestSizeOptions.RESIZE_FIT)
+                .start(getContext(),this);
     }
 
     public void showCaptionDialog() {
+        Log.d("Caption","Hit caption");
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         final View view = inflater.inflate(R.layout.caption_popup_dialog, null);
@@ -266,10 +259,82 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+    public class GetTeams extends AsyncTask<Void, Void, Boolean> {
+        GetTeams() {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress(true);
+//            post_list = new ArrayList<Post>();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            try {
+                RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+                Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
+                UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
+                final String url = credentials.server_url;
+                String URL = url+"api/get_employee_teams/"+pref.id;
+
+                JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray response_obj = response.getJSONArray("teams");
+                            if (response_obj.length() > 0) {
+                                new GetComments().execute();
+
+                            } else {
+                                Snackbar.make(view, "You can't send messages because you don't belong to any team as yet.", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                                message_area.setEnabled(false);
+                                send_button.setEnabled(false);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
+                            showProgress(false);
+                            Intent intent = new Intent(getActivity(),MainActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Log.d("error", error.toString());
+
+                    }
+                });
+                requestQueue.add(provinceRequest);
+            } catch (Exception e) {
+                showProgress(false);
+//                Toast.makeText(EmployeeTeams.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(EmployeeTeams.this,MainActivity.class);
+//                startActivity(intent);
+            }
+            // TODO: register the new account here.
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            showProgress(false);
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("Caption Dialog","Hit");
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -290,21 +355,38 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         out.close();
                         imageString = dest.getAbsolutePath();
                         image_string = imageString;
+                        Log.d("Check me",imageString);
                         showCaptionDialog();
                     } catch (Exception e) {
                         image_string = "none";
+                        Log.d("Erroroccured",e.getMessage());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Log.d("Error occured",e.getMessage());
+
                 }
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                Log.d("resultcodeerr",error.getMessage());
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG);
             }
         }
     }
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
 
+    @TargetApi(23)
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
+    }
     public void setupAdapter() {
         CommentAdapter adapter = new CommentAdapter(post_list, getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -329,9 +411,9 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     JSONObject result = new JSONObject(resultResponse);
                     String status = result.getString("status");
                     String message = result.getString("message");
-                    JSONObject comment = result.getJSONObject("comment");
+                    JSONObject comment = result.getJSONObject("message");
                     JsonParser parser = new JsonParser();
-                    //Log.d("Posts", comment.toString());
+                    Log.d("Posts", comment.toString());
                     JsonElement element = parser.parse(comment.toString());
                     Gson gson = new Gson();
                     Comment user_comment = gson.fromJson(element, Comment.class);
@@ -382,7 +464,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                     }
                 }
-                Log.i("Error", errorMessage);
+//                Log.i("Error", errorMessage);
                 error.printStackTrace();
                 showProgress(false);
                 Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
@@ -421,11 +503,15 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
     public void pushMessage(Comment cur_comment) {
         final Comment comment = cur_comment;
-        //Log.d("Pushing", "Hit Pusher");
-        //Log.d("comment_text", comment.comment_text);
+
 //        String url = "http://ec2-18-220-230-232.us-east-2.compute.amazonaws.com/chat_server.php";
         Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
-
+//        Log.d("comment_text", comment.comment_text);
+//        Log.d("first_name", comment.first_name);
+//        Log.d("last_name", comment.last_name);
+//        Log.d("created_at", comment.created_at);
+//        Log.d("picture_url", comment.picture_url);
+//        Log.d("user_picture_url", comment.user_picture_url);
         final String url = credentials.server_url+"chat_server.php";
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -433,15 +519,15 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     @Override
                     public void onResponse(String response) {
                         // response
-                        //Log.d("Response", response);
+                        Log.d("Response32", response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        //Log.d("Error.Response", error.getMessage());
-                        Toast.makeText(getActivity(), "An error occured while trying to send your message, please try again", Toast.LENGTH_LONG).show();
+//                        Log.d("Error.Response", error.getMessage());
+//                        Toast.makeText(getActivity(), "An error occured while trying to send your message, please try again", Toast.LENGTH_LONG).show();
                     }
                 }
         ) {
@@ -456,6 +542,13 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 params.put("last_name", comment.last_name);
                 params.put("created_at", comment.created_at);
                 params.put("picture_url", comment.picture_url);
+                if(comment.user_picture_url!=null){
+                    params.put("user_picture_url", comment.user_picture_url);
+                }
+                else{
+                    params.put("user_picture_url", "none");
+                }
+
                 return params;
             }
         };
@@ -493,13 +586,11 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 for (int i = 0; i < response_obj.length(); i++) {
                                     JSONObject obj = response_obj.getJSONObject(i);
                                     JsonParser parser = new JsonParser();
-                                    //Log.d("Commenst", obj.toString());
-                                    //Log.d("current",question._id);
+
                                     JsonElement element = parser.parse(obj.toString());
                                     Gson gson = new Gson();
                                     Comment post = gson.fromJson(element, Comment.class);
                                     post_list.add(post);
-
 //                                    //Log.d("Subject",post.comment_text);
                                 }
                                 if (post_list.size() > 0) {
