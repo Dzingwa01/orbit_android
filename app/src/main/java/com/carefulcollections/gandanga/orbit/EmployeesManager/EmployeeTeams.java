@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -100,6 +101,7 @@ public class EmployeeTeams extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray response_obj = response.getJSONArray("teams");
+                            Log.d("Teams pani",response_obj.toString());
                             if (response_obj.length() > 0) {
 //
                                 for (int i = 0; i < response_obj.length(); i++) {

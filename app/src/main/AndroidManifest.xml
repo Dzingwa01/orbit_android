@@ -184,6 +184,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
         </activity>
+        <activity
+            android:name=".EmployeesManager.SwapOfferActivity"
+            android:label="Shift Swap Or Offer">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
+        <activity android:name=".EmployeesManager.ViewTeams"
+            android:label="Team Members">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

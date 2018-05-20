@@ -59,6 +59,11 @@ public TeamsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, i
                 public void onClick(View v) {
                     Team team_selected = team;
 
+                    Intent intent = new Intent(ctx, ViewTeams.class);
+                    intent.putExtra("team", team_selected);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ctx.getApplicationContext().startActivity(intent);
+
                 }
             });
         }

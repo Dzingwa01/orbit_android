@@ -53,6 +53,7 @@ TextView shift_title, shift_description, start_date,end_date,shift_date;
     private ArrayList<User> users_list;
     ProgressBar progressBar;
     RecyclerView.LayoutManager mLayoutManager;
+    FloatingActionButton shift_to_swap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ TextView shift_title, shift_description, start_date,end_date,shift_date;
         listView = findViewById(R.id.listView);
         users_list = new ArrayList<>();
         progressBar = findViewById(R.id.progress);
+        shift_to_swap =findViewById(R.id.shift_to_swap);
 
         employeeAdapter = new EmployeeAdapter(users_list, ShiftDetails.this);
         mLayoutManager = new LinearLayoutManager(this);
@@ -84,6 +86,13 @@ TextView shift_title, shift_description, start_date,end_date,shift_date;
         listView.setAdapter(employeeAdapter);
         new GetUsers().execute();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        shift_to_swap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ShiftDetails.this,SwapOfferActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public class GetUsers extends AsyncTask<Void, Void, Boolean> {

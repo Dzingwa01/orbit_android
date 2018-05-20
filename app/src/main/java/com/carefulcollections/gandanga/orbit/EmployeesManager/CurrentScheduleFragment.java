@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -66,7 +67,7 @@ public class CurrentScheduleFragment extends Fragment {
     public ArrayList<Task> task_list;
     public TasksAdapter tasksAdapter;
     public ArrayList<Item> items_list;
-
+    FloatingActionButton swap_shift;
     public CurrentScheduleFragment() {
         // Required empty public constructor
     }
@@ -83,7 +84,15 @@ public class CurrentScheduleFragment extends Fragment {
         progressBar = v.findViewById(R.id.progress);
         items_list = new ArrayList<>();
         mSwipeLayout = v.findViewById(R.id.swipeRefreshLayout);
+        swap_shift = v.findViewById(R.id.swap_shift);
+        swap_shift.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),SwapOfferActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
         new GetEmployeeShifts().execute();
         return v;
     }

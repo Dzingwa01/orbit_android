@@ -70,13 +70,16 @@ public class TeamsAdapter extends RecyclerView.Adapter<TeamsAdapter.MyViewHolder
                 @Override
                 public void onClick(View v) {
                     Team team_selected = team;
+
                     Intent intent = new Intent(ctx, ManageTeams.class);
                     intent.putExtra("team", team_selected);
+
                     ctx.startActivity(intent);
                 }
             });
         }
     }
+
 
     @Override
     public int getItemCount() {

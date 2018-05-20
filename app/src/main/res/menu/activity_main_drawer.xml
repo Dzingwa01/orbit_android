@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_people_black_24px"
             android:title="My Teams"/>
         <item
-            android:id="@+id/nav_switch_team"
+            android:id="@+id/nav_swap_shift"
             android:icon="@drawable/ic_swap_horiz_black_24px"
-            android:title="Switch Team"/>
+            android:title="Swap Shift"/>
 
         <item
             android:id="@+id/nav_profile"

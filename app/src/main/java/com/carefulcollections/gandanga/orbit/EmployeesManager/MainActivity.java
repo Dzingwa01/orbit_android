@@ -200,6 +200,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, MyProfile.class);
             startActivity(intent);
         }
+        else if(id == R.id.nav_swap_shift){
+            Intent intent = new Intent(MainActivity.this,SwapOfferActivity.class);
+            startActivity(intent);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
