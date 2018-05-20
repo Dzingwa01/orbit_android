@@ -499,7 +499,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         };
         VolleySingleton.getInstance(getActivity().getBaseContext()).addToRequestQueue(multipartRequest);
-
+ 
     }
     public void pushMessage(Comment cur_comment) {
         final Comment comment = cur_comment;

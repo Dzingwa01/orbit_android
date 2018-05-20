@@ -166,6 +166,24 @@
             android:label="@string/title_activity_image_full_screen"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".EmployeesManager.ShiftDetails"
+            android:label="@string/title_activity_shift_details"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".EmployeesManager.TeamMemberDetails"
+            android:label="@string/title_activity_team_member_details"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

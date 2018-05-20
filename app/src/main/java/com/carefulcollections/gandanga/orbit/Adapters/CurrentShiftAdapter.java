@@ -12,6 +12,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -65,12 +66,11 @@ public class CurrentShiftAdapter extends RecyclerView.Adapter<CurrentShiftAdapte
                 holder.shift_title.setText(WordUtils.capitalizeFully(shift.shift_title ));
                 holder.start_date.setText(shift.start_date.toString());
                 holder.end_date.setText(shift.end_date.toString());
-
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
-
+                        Toast.makeText(ctx,shift.shift_title,Toast.LENGTH_SHORT);
                     }
                 });
             }

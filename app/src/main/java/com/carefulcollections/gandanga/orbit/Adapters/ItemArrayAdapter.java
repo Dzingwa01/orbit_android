@@ -4,13 +4,17 @@ package com.carefulcollections.gandanga.orbit.Adapters;
  * Created by Gandanga on 2018-04-19.
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.carefulcollections.gandanga.orbit.EmployeesManager.ShiftDetails;
 import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.Task;
@@ -18,17 +22,20 @@ import com.carefulcollections.gandanga.orbit.R;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_ONE = 1;
     private static final int TYPE_TWO = 2;
-
+    Context ctx;
     private ArrayList<Item> itemList;
 
     // Constructor of the class
-    public ItemArrayAdapter(ArrayList<Item> itemList) {
+    public ItemArrayAdapter(ArrayList<Item> itemList,Context ctx) {
         this.itemList = itemList;
+        this.ctx = ctx;
     }
 
     // get the size of the list
@@ -96,6 +103,15 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     @Override
                     public void onClick(View v) {
+                        Intent intent = new Intent(ctx.getApplicationContext(), ShiftDetails.class);
+                        intent.putExtra("selected_shift",shift);
+
+                        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd");
+                        String cur_day = dt1.format(Calendar.getInstance().getTime());
+                        intent.putExtra("event_date",cur_day);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctx.getApplicationContext().startActivity(intent);
+
                     }
                 });
             }
@@ -120,7 +136,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     @Override
                     public void onClick(View v) {
-
+//                        Toast.makeText(ctx,task.item_name,Toast.LENGTH_SHORT);
                     }
                 });
             }

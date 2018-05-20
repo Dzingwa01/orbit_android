@@ -2,18 +2,19 @@ package com.carefulcollections.gandanga.orbit.Models;
 
 import android.text.format.Time;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Gandanga on 2018-04-19.
  */
 
-public class Item {
+public class Item implements Serializable {
     public enum ItemType {
         ONE_ITEM, TWO_ITEM;
     }
 
-
+    public int id;
     public String item_name;
     public String item_description;
     public Date item_start_date;
@@ -24,7 +25,8 @@ public class Item {
     public String end_time;
     public Date item_shift_date;
 
-    public Item(String item_name, String item_description, Date item_start_date, Date item_end_date,Date item_shift_date, String item_picture_url, ItemType type,String start_time, String end_time) {
+    public Item(int id,String item_name, String item_description, Date item_start_date, Date item_end_date,Date item_shift_date, String item_picture_url, ItemType type,String start_time, String end_time) {
+        this.id = id;
         this.item_name = item_name;
         this.item_description = item_description;
         this.item_start_date = item_start_date;

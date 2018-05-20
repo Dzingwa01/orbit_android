@@ -1,5 +1,6 @@
 package com.carefulcollections.gandanga.orbit.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +22,14 @@ import java.util.ArrayList;
 public class AdminItemArrayAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_ONE = 1;
     private static final int TYPE_TWO = 2;
+    Context ctx;
 
     private ArrayList<Item> itemList;
 
     // Constructor of the class
-    public AdminItemArrayAdapter(ArrayList<Item> itemList) {
+    public AdminItemArrayAdapter(ArrayList<Item> itemList, Context ctx) {
         this.itemList = itemList;
+        this.ctx = ctx;
     }
 
     // get the size of the list

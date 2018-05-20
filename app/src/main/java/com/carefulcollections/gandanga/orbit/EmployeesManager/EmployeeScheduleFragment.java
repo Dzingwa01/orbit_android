@@ -29,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
+import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.carefulcollections.gandanga.orbit.R;
@@ -45,6 +46,7 @@ import com.iamhabib.easy_preference.EasyPreference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -146,6 +148,7 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
                             showProgress(false);
                             mockList(eventList,shift_list);
                         }
+                        showProgress(false);
 
                     }
                 }, new Response.ErrorListener() {
@@ -170,9 +173,6 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
 
         @Override
         protected void onPostExecute(final Boolean success) {
-//            showProgress(false);
-
-
         }
 
         @Override
@@ -220,6 +220,7 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
                 endTime1.set(Calendar.MINUTE,Integer.parseInt(time_parts1[1]));
                 BaseCalendarEvent event1 = new BaseCalendarEvent(shifts.get(i).shift_title, shifts.get(i).shift_description, "",
                         ContextCompat.getColor(this.getContext(), R.color.orange_dark), startTime1, endTime1, false);
+                event1.setId(shifts.get(i).id);
                 eventList.add(event1);
             }
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
@@ -228,26 +229,6 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
             mAgendaCalendarView.init(eventList, minDate, maxDate, Locale.getDefault(), this);
         }
 
-
-
-//        Calendar startTime2 = Calendar.getInstance();
-//        startTime2.add(Calendar.DAY_OF_YEAR, 1);
-//        Calendar endTime2 = Calendar.getInstance();
-//        endTime2.add(Calendar.DAY_OF_YEAR, 3);
-//        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík", "A beautiful small town", "Dalvík",
-//                ContextCompat.getColor(this.getContext(), R.color.yellow), startTime2, endTime2, true);
-//        eventList.add(event2);
-//
-//        // Example on how to provide your own layout
-//        Calendar startTime3 = Calendar.getInstance();
-//        Calendar endTime3 = Calendar.getInstance();
-//        startTime3.set(Calendar.HOUR_OF_DAY, 14);
-//        startTime3.set(Calendar.MINUTE, 0);
-//        endTime3.set(Calendar.HOUR_OF_DAY, 15);
-//        endTime3.set(Calendar.MINUTE, 0);
-//        DrawableCalendarEvent event3 = new DrawableCalendarEvent("Visit of Harpa", "", "Dalvík",
-//                ContextCompat.getColor(this, R.color.blue_dark), startTime3, endTime3, false, R.drawable.common_ic_googleplayservices);
-//        eventList.add(event3);
     }
     @Override
     public void onRefresh() {
@@ -259,6 +240,27 @@ public class EmployeeScheduleFragment extends Fragment implements SwipeRefreshLa
 
     @Override
     public void onEventSelected(CalendarEvent event) {
+        Log.d("Event selected",event.getTitle());
+        Log.d("Event date",event.getDayReference().getDate().toString());
+        Log.d("Event id",String.valueOf(event.getId()));
+        Intent intent = new Intent(getActivity(), ShiftDetails.class);
+        int shift_id = Integer.valueOf(String.valueOf(event.getId()));
+
+        for(int i=0;i<shift_list.size();i++){
+            Shift shift = shift_list.get(i);
+            if(shift.id == shift_id){
+                Item cur = new Item(shift.id,shift.shift_title,shift.shift_description,shift.start_date, shift.end_date,shift.shift_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
+
+                intent.putExtra("selected_shift",cur);
+                SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd");
+               String cur_day = dt1.format(cur.item_shift_date);
+                intent.putExtra("event_date",cur_day);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                return;
+            }
+        }
+
     }
 
     @Override

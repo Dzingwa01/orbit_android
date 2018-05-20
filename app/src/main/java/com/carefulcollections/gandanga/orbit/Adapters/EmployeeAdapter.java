@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.carefulcollections.gandanga.orbit.EmployeesManager.EditProfile;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.TeamMemberDetails;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Managers.EmployeeProfile;
 import com.carefulcollections.gandanga.orbit.Models.User;
@@ -97,8 +98,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
                 @Override
                 public void onClick(View v) {
                     User user_selected = user;
-                    Intent intent = new Intent(ctx, EmployeeProfile.class);
-                    intent.putExtra("teacher", user_selected);
+                    Intent intent = new Intent(ctx, TeamMemberDetails.class);
+                    intent.putExtra("user", user_selected);
                     ctx.startActivity(intent);
                 }
             });
