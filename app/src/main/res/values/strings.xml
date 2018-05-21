@@ -52,6 +52,6 @@
     <string name="title_activity_manager_profile">Manager Profile</string>
     <string name="title_activity_manager_edit_profile">Edit Profile</string>
     <string name="title_activity_image_full_screen">ImageFullScreen</string>
-    <string name="title_activity_shift_details">Current Shift Details</string>
+    <string name="title_activity_shift_details">Shift Details</string>
     <string name="title_activity_team_member_details">Team Member Details</string>
 </resources>

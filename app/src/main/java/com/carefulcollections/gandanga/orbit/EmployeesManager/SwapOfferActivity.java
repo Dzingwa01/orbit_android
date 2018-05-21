@@ -27,7 +27,7 @@ public class SwapOfferActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new SwapFragment(), "Swap");
         adapter.addFragment(new OfferShiftFragment(), "Offer Shift");
-
+        adapter.addFragment(new RequestTimeOff(), "Request Time Off");
         viewPager.setAdapter(adapter);
     }
 }
