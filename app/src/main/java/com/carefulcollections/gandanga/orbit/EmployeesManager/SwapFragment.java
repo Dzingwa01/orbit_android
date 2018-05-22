@@ -117,9 +117,7 @@ Spinner shift_to_swap, shift_to_swap_with;
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ShiftSchedule shift = shift_list.get(i);
                 selected_shit = shift.id;
-
-                Toast.makeText(getActivity(),String.valueOf(shift.id) + "-" + String.valueOf(shift.employee_id),Toast.LENGTH_LONG).show();
-            }
+              }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -133,7 +131,6 @@ Spinner shift_to_swap, shift_to_swap_with;
                 ShiftSchedule shift = shift_list_with.get(i);
                 swap_shift_with = shift.id;
                 employee_id = shift.employee_id;
-                Toast.makeText(getActivity(),String.valueOf(shift.id) + "-" + String.valueOf(shift.employee_id),Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -143,12 +140,10 @@ Spinner shift_to_swap, shift_to_swap_with;
         return v;
     }
     public void storeShiftSwap() {
-//        showProgress(true);
-
         Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
         UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
         final String url = credentials.server_url;
-        String URL = url+"api/store_shift_swap/";
+        String URL = url+"api/store_shift_swap";
 
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, URL, new Response.Listener<NetworkResponse>() {
             @Override
@@ -163,9 +158,7 @@ Spinner shift_to_swap, shift_to_swap_with;
                     Log.d("This_User", swapped);
                     JSONObject response_1 = result.getJSONObject("swap_response");
 //                    JsonParser parser = new JsonParser();
-
                      Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 } catch (JSONException e) {
@@ -186,11 +179,11 @@ Spinner shift_to_swap, shift_to_swap_with;
                 } else {
                     String result = new String(networkResponse.data);
                     try {
-                        //Log.d("Error Result", result);
+                        Log.d("Error Result", result);
                         JSONObject response = new JSONObject(result);
                         String status = response.getString("status");
                         String message = response.getString("message");
-                       errorMessage =message;
+                       errorMessage = message;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -207,6 +200,7 @@ Spinner shift_to_swap, shift_to_swap_with;
                 params.put("swap_shift", String.valueOf(selected_shit));
                 params.put("with_shift", String.valueOf(swap_shift_with));
                 params.put("requestor_id", pref.id);
+                params.put("employee_id", String.valueOf(employee_id));
                 params.put("reason",swap_shift_reason.getText().toString());
                 return params;
             }
