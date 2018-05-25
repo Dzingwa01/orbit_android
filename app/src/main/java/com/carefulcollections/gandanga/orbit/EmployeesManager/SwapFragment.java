@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -288,8 +289,14 @@ Spinner shift_to_swap, shift_to_swap_with;
                             java.text.SimpleDateFormat dt = new java.text.SimpleDateFormat("yyyy-mm-dd");
                             shift_names.add(dt.format(shift.shift_date) + " : "+ shift.start_time.toString() + " - " + shift.end_time.toString());
                         }
+                        send_shift_swap.setEnabled(true);
                         shift_to_swap.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,shift_names));
                         getTeamMemberShifts();
+                    }else{
+                            send_shift_swap.setEnabled(false);
+                            Snackbar.make(getView(), "You currently do not have any available shifts to offer", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+
                     }
                 progressBar.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {

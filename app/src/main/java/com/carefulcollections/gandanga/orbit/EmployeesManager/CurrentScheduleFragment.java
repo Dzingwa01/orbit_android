@@ -137,12 +137,7 @@ public class CurrentScheduleFragment extends Fragment {
                                     shift_list.add(shift);
 
                                 }
-//                                if (shift_list.size() > 0) {
-//                                    Log.d("Check","Check me");
-////                                    Collections.sort(shift_list, new TeamComparator());
-////                                    teamAdapter.notifyDataSetChanged();
-//                                    setupAdapter();
-//                                }
+//                                swap_shift.setVisibility(View.VISIBLE);
 
                             } else {
                                 Shift shift = new Shift(0,"No shifts upcoming for today",new Date(),new Date(),new Date(),0,"none", "","","");

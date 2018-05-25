@@ -2,6 +2,7 @@ package com.carefulcollections.gandanga.orbit.EmployeesManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -62,6 +64,7 @@ ArrayList<String> shift_names;
     int offer_shift =0;
     EditText shift_offer_reason;
     Button send_shift_offer;
+    CheckBox all_day_check;
 
 ProgressBar progressBar;
 
@@ -75,6 +78,7 @@ ProgressBar progressBar;
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.offer_shift_fragment, container, false);
+
         shift_to_offer = v.findViewById(R.id.shift_offered);
         employee_to_offer = v.findViewById(R.id.team_member);
         offer_shift_layout = v.findViewById(R.id.offer_shift_layout);
@@ -278,8 +282,7 @@ ProgressBar progressBar;
                             shift_names.add(dt.format(shift.shift_date) + " : "+ shift.start_time.toString() + " - " + shift.end_time.toString());
                         }
                         shift_to_offer.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,shift_names));
-//                        employee_to_offer.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,shift_names));
-
+                        send_shift_offer.setEnabled(true);
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
@@ -287,7 +290,14 @@ ProgressBar progressBar;
                     Log.d("Error2",e.getMessage());
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-                getAvailableMembers();
+                if(shift_list.size()>0){
+                    getAvailableMembers();
+                }else{
+                    send_shift_offer.setEnabled(false);
+                    Snackbar.make(getView(), "You currently do not have any available shifts to offer", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override

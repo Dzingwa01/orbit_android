@@ -45,9 +45,17 @@
     <string name="title_activity_my_profile">My Profile</string>
     <string name="title_activity_edit_profile">Edit Profile</string>
 
+    <string-array name="leave_type">
+        <item>Off</item>
+        <item>Sick Day</item>
+        <item>Parental Leave</item>
+        <item>Study Leave</item>
+        <item>Unpaid</item>
+        <item>Vacation</item>
+    </string-array>
     <string-array name="gender">
-        <item>male</item>
-        <item>female</item>
+        <item>Male</item>
+        <item>Female</item>
     </string-array>
     <string name="title_activity_manager_profile">Manager Profile</string>
     <string name="title_activity_manager_edit_profile">Edit Profile</string>
