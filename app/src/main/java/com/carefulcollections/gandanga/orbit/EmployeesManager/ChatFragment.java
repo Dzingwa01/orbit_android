@@ -90,9 +90,7 @@ import java.util.Map;
 
 public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-
     ImageView img, picture_attachement;
-
     ImageView profile_image;
     ImageView send_button;
     EditText message_area;
@@ -503,15 +501,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
     public void pushMessage(Comment cur_comment) {
         final Comment comment = cur_comment;
-
-//        String url = "http://ec2-18-220-230-232.us-east-2.compute.amazonaws.com/chat_server.php";
         Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
-//        Log.d("comment_text", comment.comment_text);
-//        Log.d("first_name", comment.first_name);
-//        Log.d("last_name", comment.last_name);
-//        Log.d("created_at", comment.created_at);
-//        Log.d("picture_url", comment.picture_url);
-//        Log.d("user_picture_url", comment.user_picture_url);
         final String url = credentials.server_url+"chat_server.php";
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -534,6 +524,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("event_type","Comment");
                 params.put("user_id", String.valueOf(comment.user_id));
                 params.put("id", String.valueOf(comment.id));
                 params.put("team_id", String.valueOf(comment.team_id));
@@ -596,11 +587,14 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 if (post_list.size() > 0) {
                                     setupAdapter();
                                 } else {
-                                    Toast.makeText(getActivity(), "There are no messages as yet", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getActivity(), "There are no messages as yet", Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(getView(), "There are no messages as yet", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
                                 }
 
                             } else {
-                                Toast.makeText(getActivity(), "There are no messages as yet", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(), "There are no messages as yet", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

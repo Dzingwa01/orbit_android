@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_messages"
         android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_notification_important_24px"
+        android:title="@string/action_messages"
+        android:iconTint="@color/colorAccent"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="200"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
 </menu>

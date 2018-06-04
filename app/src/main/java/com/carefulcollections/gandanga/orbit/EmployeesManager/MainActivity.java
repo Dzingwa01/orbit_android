@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(new CurrentScheduleFragment(), "Today");
         adapter.addFragment(new EmployeeScheduleFragment(), "Schedule");
         adapter.addFragment(new ChatFragment(), "Chat");
-        adapter.addFragment(new InboxFragment(), "Inbox");
+        adapter.addFragment(new InboxFragment(), "Requests & Offers");
         viewPager.setAdapter(adapter);
     }
 
@@ -179,6 +179,10 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        else if(id==R.id.action_messages){
+            Intent intent = new Intent(MainActivity.this,EmployeeMessages.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -191,11 +191,48 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
         </activity>
-        <activity android:name=".EmployeesManager.ViewTeams"
+        <activity
+            android:name=".EmployeesManager.ViewTeams"
             android:label="Team Members">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".EmployeesManager.EmployeeMessages"
+            android:label="@string/title_activity_employee_messages"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".EmployeesManager.EmployeeDirectMessage"
+            android:label="@string/title_activity_employee_direct_message"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".Managers.NotificationCenter"
+            android:label="@string/title_activity_notification_center"
+            android:parentActivityName=".Managers.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
+        <activity
+            android:name=".Managers.ManagerMessenger"
+            android:label="@string/title_activity_manager_messenger"
+            android:parentActivityName=".Managers.NotificationCenter"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.NotificationCenter"/>
         </activity>
     </application>
 

@@ -29,14 +29,17 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.carefulcollections.gandanga.orbit.Helpers.AppHelper;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
 import com.carefulcollections.gandanga.orbit.Helpers.VolleyMultipartRequest;
 import com.carefulcollections.gandanga.orbit.Helpers.VolleySingleton;
 import com.carefulcollections.gandanga.orbit.Managers.ManagerActivity;
+import com.carefulcollections.gandanga.orbit.Models.Comment;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.ShiftSchedule;
+import com.carefulcollections.gandanga.orbit.Models.SwapShift;
 import com.carefulcollections.gandanga.orbit.Models.User;
 import com.carefulcollections.gandanga.orbit.Models.UserComparator;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
@@ -140,6 +143,47 @@ Spinner shift_to_swap, shift_to_swap_with;
         });
         return v;
     }
+
+    public void pushShiftSwap(SwapShift swapShift) {
+        final SwapShift swapShift1 = swapShift;
+        Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
+        final String url = credentials.server_url+"chat_server.php";
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response32", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+//                        Log.d("Error.Response", error.getMessage());
+//                        Toast.makeText(getActivity(), "An error occured while trying to send your message, please try again", Toast.LENGTH_LONG).show();
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("event_type","Shift Swap");
+                params.put("id", String.valueOf(swapShift1.id));
+                params.put("swap_shift", String.valueOf(swapShift1.swap_shift));
+                params.put("with_shift", String.valueOf(swapShift1.with_shift));
+                params.put("employee_id", String.valueOf(swapShift1.employee_id));
+                params.put("reason", swapShift1.reason);
+                params.put("requestor_id", String.valueOf(swapShift1.requestor_id));
+                params.put("created_at", swapShift1.created_at);
+
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
     public void storeShiftSwap() {
         Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
         UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
@@ -158,7 +202,11 @@ Spinner shift_to_swap, shift_to_swap_with;
                     String swapped = result.getString("swap_response");
                     Log.d("This_User", swapped);
                     JSONObject response_1 = result.getJSONObject("swap_response");
-//                    JsonParser parser = new JsonParser();
+                    JsonParser parser = new JsonParser();
+                    JsonElement element = parser.parse(response_1.toString());
+                    Gson gson = new Gson();
+                    SwapShift swap_shift = gson.fromJson(element, SwapShift.class);
+                    pushShiftSwap(swap_shift);
                      Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);

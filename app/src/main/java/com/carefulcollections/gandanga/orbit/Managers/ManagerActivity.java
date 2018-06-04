@@ -186,6 +186,10 @@ public class ManagerActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else if(id== R.id.action_messages){
+            Intent intent = new Intent(ManagerActivity.this,NotificationCenter.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -374,7 +378,7 @@ public class ManagerActivity extends AppCompatActivity
         adapter.addFragment(new ManagerScheduleFragment(), "Current");
         adapter.addFragment(new ManagerShifts(), "Shifts");
         adapter.addFragment(new TeamsFragment(), "Teams");
-        adapter.addFragment(new InboxFragment(), "Inbox");
+        adapter.addFragment(new InboxFragment(), "Requests");
         viewPager.setAdapter(adapter);
     }
 

@@ -44,6 +44,7 @@
     <string name="title_activity_employee_teams">Your Teams</string>
     <string name="title_activity_my_profile">My Profile</string>
     <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="action_messages">Messages</string>
 
     <string-array name="leave_type">
         <item>Off</item>
@@ -62,4 +63,8 @@
     <string name="title_activity_image_full_screen">ImageFullScreen</string>
     <string name="title_activity_shift_details">Shift Details</string>
     <string name="title_activity_team_member_details">Team Member Details</string>
+    <string name="title_activity_employee_messages">Messages</string>
+    <string name="title_activity_employee_direct_message">Direct Messaging</string>
+    <string name="title_activity_notification_center">Notification Center</string>
+    <string name="title_activity_manager_messenger">Direct Messaging</string>
 </resources>
