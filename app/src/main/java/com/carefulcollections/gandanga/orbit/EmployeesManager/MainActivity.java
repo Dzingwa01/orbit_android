@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(new CurrentScheduleFragment(), "Today");
         adapter.addFragment(new EmployeeScheduleFragment(), "Schedule");
         adapter.addFragment(new ChatFragment(), "Chat");
-        adapter.addFragment(new InboxFragment(), "Requests & Offers");
+        adapter.addFragment(new InboxFragment(), "Requests");
         viewPager.setAdapter(adapter);
     }
 
