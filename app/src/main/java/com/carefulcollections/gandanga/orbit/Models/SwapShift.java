@@ -7,11 +7,11 @@ package com.carefulcollections.gandanga.orbit.Models;
 public class SwapShift {
     public int id,swap_shift,employee_id,requestor_id;
     public String reason,name,surname;
-    public Boolean approval;
+    public int approval;
     public String created_at,shift_date,with_shift;
 
 
-    public SwapShift(int id,int swap_shift,String with_shift, int employee_id, int requestor_id, String reason,Boolean approval, String shift_date,String created_at,String name, String surname){
+    public SwapShift(int id,int swap_shift,String with_shift, int employee_id, int requestor_id, String reason,int approval, String shift_date,String created_at,String name, String surname){
         this.id = id;
         this.swap_shift = swap_shift;
         this.with_shift = with_shift;

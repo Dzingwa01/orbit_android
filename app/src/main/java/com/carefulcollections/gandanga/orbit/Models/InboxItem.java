@@ -10,12 +10,12 @@ public class InboxItem {
     }
     public int id,swap_shift,requestor_id,offer_shift,team_member,employee_id;
     public String reason;
-    public Boolean approval;
+    public int approval;
     public String created_at;
     public ItemType type;
     public String shift_date,with_shift;
     public String name,surname;
-    public InboxItem(int id,int swap_shift,String with_shift,int offer_shift, int employee_id, int requestor_id, int team_member,String reason,Boolean approval,String name,String surname,String created_at,String shift_date,ItemType type){
+    public InboxItem(int id,int swap_shift,String with_shift,int offer_shift, int employee_id, int requestor_id, int team_member,String reason,int approval,String name,String surname,String created_at,String shift_date,ItemType type){
         this.id = id;
         this.swap_shift = swap_shift;
         this.with_shift = with_shift;

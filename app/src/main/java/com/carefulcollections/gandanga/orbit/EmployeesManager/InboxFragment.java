@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -58,6 +59,8 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
    ArrayList<ShiftOffer> offer_posts;
     RecyclerView listView;
     ArrayList<InboxItem> inboxItems;
+    SwipeRefreshLayout swipeRefreshLayout;
+    LinearLayout inbox_view;
 
     public InboxFragment(){
 
@@ -83,7 +86,8 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         offer_posts = new ArrayList<>();
         listView = v.findViewById(R.id.inbox_list);
         inboxItems = new ArrayList<>();
-
+        swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout);
+        inbox_view = v.findViewById(R.id.inbox_view);
         final FragmentActivity activity = getActivity();
         getSwapRequests();
         PusherOptions options = new PusherOptions();
@@ -125,8 +129,8 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
             }
 
         }else{
-            Snackbar.make(getView(), "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Snackbar.make(inbox_view, "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
+                    .show();
         }
         if(offer_posts.size()>0){
             for(int i=0;i<offer_posts.size();i++){
@@ -136,8 +140,8 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
             }
         }
         else{
-            Snackbar.make(getView(), "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Snackbar.make(inbox_view, "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
+                   .show();
         }
         EmployeeInboxAdapter itemArrayAdapter = new EmployeeInboxAdapter(inboxItems,getActivity());
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
