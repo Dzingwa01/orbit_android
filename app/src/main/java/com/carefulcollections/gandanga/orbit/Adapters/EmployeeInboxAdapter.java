@@ -58,6 +58,7 @@ import java.util.Map;
 public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_ONE = 1;
     private static final int TYPE_TWO = 2;
+    private static final int TYPE_THREE = 3;
     Context ctx;
     private ArrayList<InboxItem> itemList;
 
@@ -81,7 +82,11 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
             return TYPE_ONE;
         } else if (item.getType() == InboxItem.ItemType.TWO_ITEM) {
             return TYPE_TWO;
-        } else {
+        }
+        else if (item.getType() == InboxItem.ItemType.THREE_ITEM) {
+            return TYPE_THREE;
+        }
+        else {
             return -1;
         }
     }
@@ -98,7 +103,13 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.off_request_layout, parent, false);
             return new ViewHolderTwo(view);
-        } else {
+        }
+        else if (viewType == TYPE_THREE) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.no_offers_swaps, parent, false);
+            return new ViewHolderThree(view);
+        }
+        else {
             throw new RuntimeException("The type has to be ONE or TWO");
         }
     }
@@ -112,6 +123,9 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case TYPE_TWO:
                 initLayoutTwo((ViewHolderTwo) holder, listPosition);
+                break;
+            case TYPE_THREE:
+                initLayoutThree((ViewHolderThree)holder, listPosition);
                 break;
             default:
                 break;
@@ -135,11 +149,11 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.more_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLogoutConfirmDialog("Shift Swap Details",shift);
+                showSwapConfirmDialog("Shift Swap Details",shift);
             }
         });
     }
-    public void showLogoutConfirmDialog(String title,final InboxItem shift) {
+    public void showSwapConfirmDialog(String title,final InboxItem shift) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = LayoutInflater.from(ctx);
         final View view = inflater.inflate(R.layout.more_details_layout, null);
@@ -177,7 +191,7 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-    public void showLogoutOfferConfirmDialog(String title,final InboxItem shift) {
+    public void showOfferConfirmDialog(String title,final InboxItem shift) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx);
         LayoutInflater inflater = LayoutInflater.from(ctx);
         final View view = inflater.inflate(R.layout.offer_more_details, null);
@@ -388,24 +402,40 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private void initLayoutTwo(final ViewHolderTwo holder, int pos) {
         final InboxItem shift = itemList.get(pos);
-        if (shift != null) {
-            holder.shift_date.setText(shift.shift_date);
-            holder.employee_name.setText(shift.name + " - " + shift.surname);
+        if(shift.id!=0){
+            if (shift != null) {
+                holder.shift_date.setText(shift.shift_date);
+                holder.employee_name.setText(shift.name + " - " + shift.surname);
 //            holder.swap_shift_date.setText(shift.shift_date);
-            holder.accept_offer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    sendOfferAccept(shift, holder);
-                }
-            });
-            holder.more_details.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showLogoutOfferConfirmDialog("Shift Offer Details",shift);
-                }
-            });
+                holder.accept_offer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        sendOfferAccept(shift, holder);
+                    }
+                });
+                holder.more_details.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showOfferConfirmDialog("Shift Offer Details",shift);
+                    }
+                });
+            }
+        }else{
+            holder.shift_date.setText(shift.shift_date);
         }
+
     }
+
+    private void initLayoutThree(final ViewHolderThree holder, int pos) {
+        final InboxItem shift = itemList.get(pos);
+        if(shift.id!=0){
+            if (shift != null) {
+                holder.title.setText(shift.reason);
+            }
+        }
+
+    }
+
     private void sendOfferAccept(final InboxItem shift,final ViewHolderTwo viewHolderTwo){
         Credentials credentials = EasyPreference.with(ctx).getObject("server_details", Credentials.class);
         UserPref pref = EasyPreference.with(ctx).getObject("user_pref", UserPref.class);
@@ -574,6 +604,15 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
             accept_offer = v.findViewById(R.id.accept);
             more_details = v.findViewById(R.id.more_details);
 //            task_description = v.findViewById(R.id.task_description);
+        }
+    }
+    static class ViewHolderThree extends RecyclerView.ViewHolder {
+        private TextView title;
+
+        public ViewHolderThree(View v) {
+            super(v);
+            title = v.findViewById(R.id.title);
+
         }
     }
 }

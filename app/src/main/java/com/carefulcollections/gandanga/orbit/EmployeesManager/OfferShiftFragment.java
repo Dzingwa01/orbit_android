@@ -294,8 +294,13 @@ ProgressBar progressBar;
                     getAvailableMembers();
                 }else{
                     send_shift_offer.setEnabled(false);
-                    Snackbar.make(getView(), "You currently do not have any available shifts to offer", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    try{
+                        Snackbar.make(getView(), "You currently do not have any available shifts to offer", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }catch (Exception e){
+
+                    }
+
                 }
 
             }

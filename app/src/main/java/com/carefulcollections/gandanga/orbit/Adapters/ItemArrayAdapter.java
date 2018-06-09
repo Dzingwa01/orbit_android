@@ -91,6 +91,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void initLayoutOne(ViewHolderOne holder, int pos) {
         final Item shift = itemList.get(pos);
+
         if (shift != null) {
             if (shift.item_description == "none") {
                 holder.shift_title.setText(WordUtils.capitalizeFully(shift.item_name));

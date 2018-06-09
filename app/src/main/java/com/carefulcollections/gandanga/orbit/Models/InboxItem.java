@@ -6,7 +6,7 @@ package com.carefulcollections.gandanga.orbit.Models;
 
 public class InboxItem {
     public enum ItemType {
-        ONE_ITEM, TWO_ITEM;
+        ONE_ITEM, TWO_ITEM,THREE_ITEM;
     }
     public int id,swap_shift,requestor_id,offer_shift,team_member,employee_id;
     public String reason;

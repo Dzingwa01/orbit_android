@@ -186,7 +186,7 @@
         </activity>
         <activity
             android:name=".EmployeesManager.SwapOfferActivity"
-            android:label="Shift Swap Or Offer">
+            android:label="Shift Management">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>

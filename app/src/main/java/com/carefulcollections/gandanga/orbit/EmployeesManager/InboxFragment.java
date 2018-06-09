@@ -129,8 +129,15 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
             }
 
         }else{
-            Snackbar.make(inbox_view, "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
-                    .show();
+            try{
+                Snackbar.make(inbox_view, "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
+                        .show();
+                InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Shift Offer",0,"No Available Shift Swap","","","", InboxItem.ItemType.THREE_ITEM);
+                inboxItems.add(cur);
+            }catch(Exception e){
+                Log.d("Error",e.getMessage().toString());
+            }
+
         }
         if(offer_posts.size()>0){
             for(int i=0;i<offer_posts.size();i++){
@@ -140,8 +147,15 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
             }
         }
         else{
-            Snackbar.make(inbox_view, "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
-                   .show();
+            try{
+                Snackbar.make(inbox_view, "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
+                        .show();
+                InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Shift Offer",0,"No Available Shift Offers","","","", InboxItem.ItemType.THREE_ITEM);
+                inboxItems.add(cur);
+            }catch(Exception e){
+                Log.d("Error",e.getMessage().toString());
+            }
+
         }
         EmployeeInboxAdapter itemArrayAdapter = new EmployeeInboxAdapter(inboxItems,getActivity());
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
