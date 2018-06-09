@@ -130,9 +130,9 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
 
         }else{
             try{
-                Snackbar.make(inbox_view, "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
-                        .show();
-                InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Shift Offer",0,"No Available Shift Swap","","","", InboxItem.ItemType.THREE_ITEM);
+//                Snackbar.make(inbox_view, "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
+//                        .show();
+                InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Swap Offer",0,"No Available Shift Swap","","","", InboxItem.ItemType.THREE_ITEM);
                 inboxItems.add(cur);
             }catch(Exception e){
                 Log.d("Error",e.getMessage().toString());
@@ -148,8 +148,8 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         }
         else{
             try{
-                Snackbar.make(inbox_view, "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
-                        .show();
+//                Snackbar.make(inbox_view, "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
+//                        .show();
                 InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Shift Offer",0,"No Available Shift Offers","","","", InboxItem.ItemType.THREE_ITEM);
                 inboxItems.add(cur);
             }catch(Exception e){

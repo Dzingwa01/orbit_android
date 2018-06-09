@@ -428,7 +428,7 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private void initLayoutThree(final ViewHolderThree holder, int pos) {
         final InboxItem shift = itemList.get(pos);
-        if(shift.id!=0){
+        if(shift.id==0){
             if (shift != null) {
                 holder.title.setText(shift.reason);
             }
