@@ -67,4 +67,5 @@
     <string name="title_activity_employee_direct_message">Direct Messaging</string>
     <string name="title_activity_notification_center">Notification Center</string>
     <string name="title_activity_manager_messenger">Direct Messaging</string>
+    <string name="title_activity_manager_create_shift">Create Shift</string>
 </resources>

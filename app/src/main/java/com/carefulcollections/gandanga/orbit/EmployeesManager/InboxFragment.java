@@ -87,6 +87,7 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         listView = v.findViewById(R.id.inbox_list);
         inboxItems = new ArrayList<>();
         swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         inbox_view = v.findViewById(R.id.inbox_view);
         final FragmentActivity activity = getActivity();
         getSwapRequests();
@@ -130,8 +131,6 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
 
         }else{
             try{
-//                Snackbar.make(inbox_view, "You currently do not have any available swap requests", Snackbar.LENGTH_LONG)
-//                        .show();
                 InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Swap Offer",0,"No Available Shift Swap","","","", InboxItem.ItemType.THREE_ITEM);
                 inboxItems.add(cur);
             }catch(Exception e){
@@ -148,8 +147,6 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         }
         else{
             try{
-//                Snackbar.make(inbox_view, "You currently do not have any available shift offers", Snackbar.LENGTH_LONG)
-//                        .show();
                 InboxItem cur = new InboxItem(0,0,"",0,0,0,0,"No Available Shift Offer",0,"No Available Shift Offers","","","", InboxItem.ItemType.THREE_ITEM);
                 inboxItems.add(cur);
             }catch(Exception e){
@@ -158,6 +155,7 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
 
         }
         EmployeeInboxAdapter itemArrayAdapter = new EmployeeInboxAdapter(inboxItems,getActivity());
+
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setItemAnimator(new DefaultItemAnimator());
         listView.setAdapter(itemArrayAdapter);
@@ -169,7 +167,7 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
         final String url = credentials.server_url;
         String URL = url+"api/get_swap_requests/"+pref.id;
-
+        swap_posts.clear();
         JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -184,7 +182,10 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
                             JsonElement element = parser.parse(obj.toString());
                             Gson gson = new Gson();
                             SwapShift swap = gson.fromJson(element, SwapShift.class);
-                            swap_posts.add(swap);
+                            if(!swap_posts.contains(swap)){
+                                swap_posts.add(swap);
+                            }
+
                         }
                     }else{
 
@@ -215,7 +216,7 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
         final String url = credentials.server_url;
         String URL = url+"api/get_off_requests/"+pref.id;
-
+        offer_posts.clear();
         JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -231,11 +232,14 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
                             JsonElement element = parser.parse(obj.toString());
                             Gson gson = new Gson();
                             ShiftOffer offer = gson.fromJson(element, ShiftOffer.class);
-                            offer_posts.add(offer);
+                           if(!offer_posts.contains(offer)){
+                               offer_posts.add(offer);
+                           }
                         }
 //
                     }
                     setupAdapter();
+                    swipeRefreshLayout.setRefreshing(false);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
@@ -254,6 +258,10 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
 
     @Override
     public void onRefresh() {
+        inboxItems.clear();
+        swipeRefreshLayout.setRefreshing(true);
+        Log.d("Refreshing","refresging");
+        getSwapRequests();
     }
 
     @Override

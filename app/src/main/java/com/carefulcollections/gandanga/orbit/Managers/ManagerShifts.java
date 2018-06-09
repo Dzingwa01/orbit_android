@@ -90,8 +90,8 @@ public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefr
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Adding a New Shift Coming Soon", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               Intent intent = new Intent(getActivity(),ManagerCreateShift.class);
+               startActivity(intent);
             }
         });
 

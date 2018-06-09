@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,13 +43,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class EmployeeMessages extends AppCompatActivity {
+public class EmployeeMessages extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public ArrayList<Message> message_list;
     ProgressBar comments_progress;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recyclerView;
     CoordinatorLayout messages_view;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,8 @@ public class EmployeeMessages extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager((EmployeeMessages.this));
         messages_view = findViewById(R.id.messages_view);
-
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +83,7 @@ public class EmployeeMessages extends AppCompatActivity {
         UserPref pref = EasyPreference.with(EmployeeMessages.this).getObject("user_pref", UserPref.class);
         final String url = credentials.server_url;
         String URL = url+"api/get_user_messages/"+pref.id;
+        message_list.clear();
         JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -110,8 +114,10 @@ public class EmployeeMessages extends AppCompatActivity {
                         Snackbar.make(messages_view, "There are no messages as yet", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
+                    swipeRefreshLayout.setRefreshing(false);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
 
             }
@@ -156,5 +162,12 @@ public class EmployeeMessages extends AppCompatActivity {
             comments_progress.setVisibility(show ? View.VISIBLE : View.GONE);
             comments_progress.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        message_list.clear();
+        swipeRefreshLayout.setRefreshing(true);
+        getEmployeeMessages();
     }
 }

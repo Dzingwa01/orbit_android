@@ -103,9 +103,12 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView recyclerView;
     View view;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        new GetTeams().execute();
     }
 
     @Override
@@ -131,6 +134,8 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 //        mainListView = findViewById(R.id.mainListView);
         imageString = "none";
         image_string = "none";
+        swipeRefreshLayout = v.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         if (shouldAskPermissions()) {
             askPermissions();
         }
@@ -567,6 +572,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
                 String URL = url+"api/get_chat_messages/"+pref.id;
+                post_list.clear();
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -581,8 +587,9 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                     JsonElement element = parser.parse(obj.toString());
                                     Gson gson = new Gson();
                                     Comment post = gson.fromJson(element, Comment.class);
-                                    post_list.add(post);
-//                                    //Log.d("Subject",post.comment_text);
+                                    if(!post_list.contains(post)){
+                                        post_list.add(post);
+                                    }
                                 }
                                 if (post_list.size() > 0) {
                                     setupAdapter();
@@ -596,6 +603,7 @@ public class ChatFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 Snackbar.make(getView(), "There are no messages as yet", Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
                             }
+                            swipeRefreshLayout.setRefreshing(false);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

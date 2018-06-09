@@ -56,7 +56,7 @@ import java.util.Date;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CurrentScheduleFragment extends Fragment {
+public class CurrentScheduleFragment extends Fragment implements  SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView listView;
     private CurrentShiftAdapter teamAdapter;
@@ -84,6 +84,7 @@ public class CurrentScheduleFragment extends Fragment {
         progressBar = v.findViewById(R.id.progress);
         items_list = new ArrayList<>();
         mSwipeLayout = v.findViewById(R.id.swipeRefreshLayout);
+        mSwipeLayout.setOnRefreshListener(this);
         swap_shift = v.findViewById(R.id.swap_shift);
         swap_shift.setOnClickListener(new View.OnClickListener() {
 
@@ -95,6 +96,15 @@ public class CurrentScheduleFragment extends Fragment {
         });
         new GetEmployeeShifts().execute();
         return v;
+    }
+
+    @Override
+    public void onRefresh() {
+        shift_list.clear();
+        task_list.clear();
+        items_list.clear();
+        mSwipeLayout.setRefreshing(true);
+        new GetEmployeeShifts().execute();
     }
 
     public class GetEmployeeShifts extends AsyncTask<Void, Void, Boolean> {
@@ -119,6 +129,7 @@ public class CurrentScheduleFragment extends Fragment {
                 UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
                 String URL = url+"api/get_current_shift/"+pref.id;
+                shift_list.clear();
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -149,9 +160,7 @@ public class CurrentScheduleFragment extends Fragment {
                         } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
-                            showProgress(false);
-//                            Intent intent = new Intent(getActivity(),ManagerActivity.class);
-//                            startActivity(intent);
+//                            showProgress(false);
                         }
 
                     }
@@ -209,7 +218,7 @@ public class CurrentScheduleFragment extends Fragment {
                 UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
                 String URL = url+"api/get_current_tasks/"+pref.id;
-
+                task_list.clear();
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -228,13 +237,6 @@ public class CurrentScheduleFragment extends Fragment {
                                     task_list.add(task);
 
                                 }
-//                                if (task_list.size() > 0) {
-//                                    Log.d("Check","Check me");
-////                                    Collections.sort(shift_list, new TeamComparator());
-////                                    teamAdapter.notifyDataSetChanged();
-//                                    setupTaskAdapter();
-//                                }
-
                             } else {
                                 Task task = new Task(0,"No tasks for today","No tasks for today","",new Date(),new Date(),0,new Date(), "","");
 //                                Toast.makeText(getActivity(), "There are no tasks available yet", Toast.LENGTH_LONG).show();
@@ -243,12 +245,13 @@ public class CurrentScheduleFragment extends Fragment {
 //                                setupTaskAdapter();
                             }
                             setupAdapter();
+                            mSwipeLayout.setRefreshing(false);
+//                            new GetEmployeeShifts().execute();
                         } catch (Exception e) {
                             e.printStackTrace();
+                            mSwipeLayout.setRefreshing(false);
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
-                            showProgress(false);
-//                            Intent intent = new Intent(getActivity(),MainActivity.class);
-//                            startActivity(intent);
+
                         }
 
                     }

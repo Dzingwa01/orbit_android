@@ -17,9 +17,9 @@
             android:icon="@drawable/ic_create_new_folder_black_24px"
             android:title="Training Material"/>
         <item
-            android:id="@+id/nav_chat"
-            android:icon="@drawable/ic_chat_black_24px"
-            android:title="Communications"/>
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_baseline_notification_important_24px"
+            android:title="Notifications"/>
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle_black_24px"

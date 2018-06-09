@@ -234,6 +234,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.Managers.NotificationCenter"/>
         </activity>
+        <activity
+            android:name=".Managers.ManagerCreateShift"
+            android:label="@string/title_activity_manager_create_shift"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
