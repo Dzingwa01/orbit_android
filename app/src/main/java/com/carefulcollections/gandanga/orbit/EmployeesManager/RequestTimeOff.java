@@ -161,7 +161,6 @@ public class RequestTimeOff extends Fragment  implements DatePickerDialog.OnDate
             end_date.setText(i+"/"+(i1+1)+"/"+i2);
             end_date_string = i+"/"+(i1+1)+"/"+i2;
         }
-
     }
 
     public void storeOffRequest() {
