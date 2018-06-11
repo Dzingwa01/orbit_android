@@ -243,6 +243,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
         </activity>
+        <activity
+            android:name=".Managers.ManagerShiftDetails"
+            android:label="@string/title_activity_manager_shift_details"
+            android:parentActivityName=".Managers.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
     </application>
 
 </manifest>

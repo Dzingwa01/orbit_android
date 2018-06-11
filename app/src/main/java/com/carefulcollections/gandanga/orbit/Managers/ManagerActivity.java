@@ -378,7 +378,7 @@ public class ManagerActivity extends AppCompatActivity
         adapter.addFragment(new ManagerScheduleFragment(), "Current");
         adapter.addFragment(new ManagerShifts(), "Shifts");
         adapter.addFragment(new TeamsFragment(), "Teams");
-        adapter.addFragment(new InboxFragment(), "Requests");
+        adapter.addFragment(new ManagerInboxFragment(), "Requests");
         viewPager.setAdapter(adapter);
     }
 

@@ -28,7 +28,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.carefulcollections.gandanga.orbit.EmployeesManager.EmployeeScheduleFragment;
+import com.carefulcollections.gandanga.orbit.EmployeesManager.ShiftDetails;
 import com.carefulcollections.gandanga.orbit.Helpers.Credentials;
+import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.UserPref;
 import com.carefulcollections.gandanga.orbit.R;
@@ -45,6 +47,7 @@ import com.iamhabib.easy_preference.EasyPreference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -245,6 +248,24 @@ public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onEventSelected(CalendarEvent event) {
+
+        Intent intent = new Intent(getActivity(), ShiftDetails.class);
+        int shift_id = Integer.valueOf(String.valueOf(event.getId()));
+
+        for(int i=0;i<shift_list.size();i++){
+            Shift shift = shift_list.get(i);
+            if(shift.id == shift_id){
+                Item cur = new Item(shift.id,shift.shift_title,shift.shift_description,shift.start_date, shift.end_date,shift.shift_date,"",Item.ItemType.ONE_ITEM,shift.start_time,shift.end_time);
+
+                intent.putExtra("selected_shift",cur);
+                SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd");
+                String cur_day = dt1.format(cur.item_shift_date);
+                intent.putExtra("event_date",cur_day);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                return;
+            }
+        }
     }
 
     @Override
