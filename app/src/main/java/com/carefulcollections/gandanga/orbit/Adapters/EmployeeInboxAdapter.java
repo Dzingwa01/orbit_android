@@ -289,6 +289,7 @@ public class EmployeeInboxAdapter extends RecyclerView.Adapter<RecyclerView.View
                     Message push_message = gson.fromJson(msg,Message.class);
                     pushMessage(push_message);
                     Toast.makeText(ctx, message, Toast.LENGTH_LONG).show();
+                    itemList.remove(shift);
                     holderOne.swap_accept.setEnabled(false);
                 } catch (JSONException e) {
                     e.printStackTrace();

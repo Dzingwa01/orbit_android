@@ -12,6 +12,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.carefulcollections.gandanga.orbit.Managers.ManageTeams;
+import com.carefulcollections.gandanga.orbit.Managers.ViewTrainingMaterial;
 import com.carefulcollections.gandanga.orbit.Models.Team;
 import com.carefulcollections.gandanga.orbit.Models.TrainingMaterial;
 import com.carefulcollections.gandanga.orbit.R;
@@ -70,8 +71,8 @@ public class TrainingMaterialAdapter extends RecyclerView.Adapter<TrainingMateri
 
                 @Override
                 public void onClick(View v) {
-                    TrainingMaterial material_selected = material;
-                    Intent intent = new Intent(ctx, TrainingMaterial.class);
+//                    TrainingMaterial material_selected = material;
+                    Intent intent = new Intent(ctx, ViewTrainingMaterial.class);
                     intent.putExtra("material", material);
                     ctx.startActivity(intent);
                 }

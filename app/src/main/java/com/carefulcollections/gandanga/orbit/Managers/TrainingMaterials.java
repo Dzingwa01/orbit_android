@@ -17,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,6 +103,7 @@ public class TrainingMaterials extends AppCompatActivity {
                 UserPref pref = EasyPreference.with(getApplicationContext()).getObject("user_pref", UserPref.class);
                 final String url = credentials.server_url;
                 String URL = url+"api/get_materials/"+pref.id;
+
 
                 JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override

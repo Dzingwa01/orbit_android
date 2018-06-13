@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carefulcollections.gandanga.orbit.EmployeesManager.ShiftDetails;
+import com.carefulcollections.gandanga.orbit.Managers.ManagerShiftDetails;
 import com.carefulcollections.gandanga.orbit.Models.Item;
 import com.carefulcollections.gandanga.orbit.Models.Shift;
 import com.carefulcollections.gandanga.orbit.Models.Task;
@@ -104,7 +105,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(ctx.getApplicationContext(), ShiftDetails.class);
+                        Intent intent = new Intent(ctx.getApplicationContext(), ManagerShiftDetails.class);
                         intent.putExtra("selected_shift",shift);
 
                         SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-mm-dd");

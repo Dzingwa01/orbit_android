@@ -38,7 +38,7 @@
     <string name="title_activity_manager">ManagerActivity</string>
     <string name="title_activity_employee_profile">Employees</string>
     <string name="title_activity_employees">Employees</string>
-    <string name="title_activity_manage_teams">Manage Teams</string>
+    <string name="title_activity_manage_teams">Team Details</string>
     <string name="title_activity_training_materials">Training Materials</string>
     <string name="title_activity_employee_roles">Employee Roles</string>
     <string name="title_activity_employee_teams">Your Teams</string>
@@ -60,7 +60,7 @@
     </string-array>
     <string name="title_activity_manager_profile">Manager Profile</string>
     <string name="title_activity_manager_edit_profile">Edit Profile</string>
-    <string name="title_activity_image_full_screen">ImageFullScreen</string>
+    <string name="title_activity_image_full_screen">Pinch to Zoom</string>
     <string name="title_activity_shift_details">Shift Details</string>
     <string name="title_activity_team_member_details">Team Member Details</string>
     <string name="title_activity_employee_messages">Messages</string>
@@ -69,4 +69,6 @@
     <string name="title_activity_manager_messenger">Direct Messaging</string>
     <string name="title_activity_manager_create_shift">Create Shift</string>
     <string name="title_activity_manager_shift_details">Shift Details</string>
+    <string name="title_activity_view_training_material">Training Material</string>
+    <string name="title_activity_employee_training_material">Training Material</string>
 </resources>

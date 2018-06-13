@@ -50,7 +50,7 @@ import java.util.Date;
  * Created by Gandanga on 2018-04-21.
  */
 
-public class ManagerScheduleFragment extends Fragment {
+public class ManagerScheduleFragment extends Fragment implements  SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView listView;
     private CurrentShiftAdapter teamAdapter;
     private ArrayList<Shift> shift_list;
@@ -79,6 +79,16 @@ public class ManagerScheduleFragment extends Fragment {
 
         new GetEmployeeShifts().execute();
         return v;
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d("Refreshing","Refreshing");
+        shift_list.clear();
+        task_list.clear();
+        items_list.clear();
+        mSwipeLayout.setRefreshing(true);
+        new GetEmployeeShifts().execute();
     }
 
     public class GetEmployeeShifts extends AsyncTask<Void, Void, Boolean> {
@@ -218,6 +228,7 @@ public class ManagerScheduleFragment extends Fragment {
 //                                setupTaskAdapter();
                             }
                             setupAdapter();
+                            mSwipeLayout.setRefreshing(false);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
@@ -250,7 +261,7 @@ public class ManagerScheduleFragment extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
             showProgress(false);
-            Log.d("TaskList",String.valueOf(task_list.size()));
+            mSwipeLayout.setRefreshing(false);
 
         }
 

@@ -163,8 +163,7 @@
         </activity>
         <activity
             android:name=".Helpers.ImageFullScreen"
-            android:label="@string/title_activity_image_full_screen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_image_full_screen">
         </activity>
         <activity
             android:name=".EmployeesManager.ShiftDetails"
@@ -251,6 +250,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
+        <activity
+            android:name=".Managers.ViewTrainingMaterial"
+            android:label="@string/title_activity_view_training_material"
+            android:parentActivityName=".Managers.ManagerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.Managers.ManagerActivity"/>
+        </activity>
+        <activity
+            android:name=".EmployeesManager.EmployeeTrainingMaterial"
+            android:label="@string/title_activity_employee_training_material"
+            android:parentActivityName=".EmployeesManager.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"/>
         </activity>
     </application>
 

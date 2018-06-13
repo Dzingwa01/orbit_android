@@ -208,6 +208,11 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this,SwapOfferActivity.class);
             startActivity(intent);
         }
+
+        else if(id == R.id.nav_training_material){
+            Intent intent = new Intent(MainActivity.this,EmployeeTrainingMaterial.class);
+            startActivity(intent);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

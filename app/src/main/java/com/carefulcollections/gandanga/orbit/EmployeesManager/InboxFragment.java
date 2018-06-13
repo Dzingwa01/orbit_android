@@ -159,6 +159,7 @@ public class InboxFragment extends ListFragment implements AdapterView.OnItemCli
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         listView.setItemAnimator(new DefaultItemAnimator());
         listView.setAdapter(itemArrayAdapter);
+        itemArrayAdapter.notifyDataSetChanged();
     }
 
     public void getSwapRequests(){

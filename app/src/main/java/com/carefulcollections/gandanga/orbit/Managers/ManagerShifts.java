@@ -249,9 +249,9 @@ public class ManagerShifts extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onEventSelected(CalendarEvent event) {
 
-        Intent intent = new Intent(getActivity(), ShiftDetails.class);
+        Intent intent = new Intent(getActivity(), ManagerShiftDetails.class);
         int shift_id = Integer.valueOf(String.valueOf(event.getId()));
-
+        Log.d("selected_shift",String.valueOf(shift_id));
         for(int i=0;i<shift_list.size();i++){
             Shift shift = shift_list.get(i);
             if(shift.id == shift_id){

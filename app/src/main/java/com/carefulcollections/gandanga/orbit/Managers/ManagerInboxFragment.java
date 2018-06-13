@@ -108,14 +108,14 @@ public class ManagerInboxFragment extends ListFragment implements AdapterView.On
         Credentials credentials = EasyPreference.with(getActivity()).getObject("server_details", Credentials.class);
         UserPref pref = EasyPreference.with(getActivity()).getObject("user_pref", UserPref.class);
         final String url = credentials.server_url;
-        String URL = url+"api/get_off_requests/"+pref.id;
+        String URL = url+"api/get_leave_requests/"+pref.id;
         shift_offers.clear();
         JsonObjectRequest provinceRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray response_obj = response.getJSONArray("swap_requests");
-                    Log.d("Response",response_obj.toString());
+                    JSONArray response_obj = response.getJSONArray("leave_requests");
+                    Log.d("Response_Leave",response_obj.toString());
                     if (response_obj.length() > 0) {
 //
                         for (int i = 0; i < response_obj.length(); i++) {
@@ -125,21 +125,23 @@ public class ManagerInboxFragment extends ListFragment implements AdapterView.On
                             Gson gson = new Gson();
                             LeaveRequest swap = gson.fromJson(element, LeaveRequest.class);
                             if(!shift_offers.contains(swap)){
+                                swap.type = LeaveRequest.ItemType.ONE_ITEM;
                                 shift_offers.add(swap);
                             }
-
                         }
+
                     }else{
-
+                        LeaveRequest request = new LeaveRequest(0,"","","","","","","No Available Leave Requests",0,"","");
+                        request.type = LeaveRequest.ItemType.TWO_ITEM;
+                        shift_offers.add(request);
                     }
+                    swipeRefreshLayout.setRefreshing(false);
+                    setupAdapter();
 
-                    getOffRequests();
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Data error, please try again", Toast.LENGTH_LONG).show();
-//                    showProgress(false);
-//                            Intent intent = new Intent(getActivity(),MainActivity.class);
-//                            startActivity(intent);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
 
             }
@@ -156,6 +158,10 @@ public class ManagerInboxFragment extends ListFragment implements AdapterView.On
 
     @Override
     public void onRefresh() {
+        inboxItems.clear();
+        swipeRefreshLayout.setRefreshing(true);
+        Log.d("Refreshing","refresging");
+        getOffRequests();
     }
 
     @Override

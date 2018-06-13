@@ -59,7 +59,7 @@ public class ManagerShiftDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shift_details);
+        setContentView(R.layout.activity_manager_shift_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
@@ -78,7 +78,7 @@ public class ManagerShiftDetails extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         users_list = new ArrayList<>();
         progressBar = findViewById(R.id.progress);
-        shift_to_swap =findViewById(R.id.shift_to_swap);
+//        shift_to_swap =findViewById(R.id.shift_to_swap);
 
         employeeAdapter = new EmployeeAdapter(users_list, ManagerShiftDetails.this);
         mLayoutManager = new LinearLayoutManager(this);
@@ -87,13 +87,13 @@ public class ManagerShiftDetails extends AppCompatActivity {
         listView.setAdapter(employeeAdapter);
         new GetUsers().execute();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        shift_to_swap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ManagerShiftDetails.this,SwapOfferActivity.class);
-                startActivity(intent);
-            }
-        });
+//        shift_to_swap.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ManagerShiftDetails.this,SwapOfferActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     public class GetUsers extends AsyncTask<Void, Void, Boolean> {

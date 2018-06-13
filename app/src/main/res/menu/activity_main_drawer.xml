@@ -12,19 +12,16 @@
             android:id="@+id/nav_swap_shift"
             android:icon="@drawable/ic_swap_horiz_black_24px"
             android:title="Swap Shift"/>
+        <item
+            android:id="@+id/nav_training_material"
+            android:icon="@drawable/ic_create_new_folder_black_24px"
+            android:title="Training Material"/>
 
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle_black_24px"
             android:title="My Profile"/>
-        <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help_outline_black_24px"
-            android:title="Help"/>
-        <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/ic_info_outline_black_24px"
-            android:title="About Orbit"/>
+
     </group>
 
     <item android:title="Extras">
@@ -33,6 +30,14 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_settings_black_24px"
                 android:title="Settings"/>
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help_outline_black_24px"
+                android:title="Help"/>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info_outline_black_24px"
+                android:title="About Orbit"/>
             <item
                 android:id="@+id/nav_signout"
                 android:icon="@drawable/ic_lock_outline_black_24px"
