@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.carefulcollections.gandanga.orbit.EmployeesManager.MainActivity"
+    tools:context="com.carefulcollections.gandanga.mishift.EmployeesManager.MainActivity"
     tools:showIn="@layout/app_bar_main">
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

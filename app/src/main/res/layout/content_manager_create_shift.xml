@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.carefulcollections.gandanga.orbit.Managers.ManagerCreateShift"
+    tools:context="com.carefulcollections.gandanga.mishift.Managers.ManagerCreateShift"
     tools:showIn="@layout/activity_manager_create_shift">
 <android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"

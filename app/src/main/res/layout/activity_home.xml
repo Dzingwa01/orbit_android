@@ -6,7 +6,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
-                                                 tools:context="com.carefulcollections.gandanga.orbit.HomeActivity">
+                                                 tools:context="com.carefulcollections.gandanga.mishift.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

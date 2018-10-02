@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.carefulcollections.gandanga.orbit.Managers.ManagerProfile"
+    tools:context="com.carefulcollections.gandanga.mishift.Managers.ManagerProfile"
     tools:showIn="@layout/activity_manager_profile">
     <LinearLayout
         android:layout_width="match_parent"

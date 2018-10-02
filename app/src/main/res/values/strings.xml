@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Orbit</string>
+    <string name="app_name">MiShift</string>
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Sign in - MiShift</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -71,4 +71,6 @@
     <string name="title_activity_manager_shift_details">Shift Details</string>
     <string name="title_activity_view_training_material">Training Material</string>
     <string name="title_activity_employee_training_material">Training Material</string>
+    <string name="channel_name">MiShift Messages</string>
+    <string name="channel_description">MiShift Messages Channel</string>
 </resources>

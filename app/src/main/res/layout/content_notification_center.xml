@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/messages_view"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.carefulcollections.gandanga.orbit.Managers.NotificationCenter"
+    tools:context="com.carefulcollections.gandanga.mishift.Managers.NotificationCenter"
     tools:showIn="@layout/activity_notification_center">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
